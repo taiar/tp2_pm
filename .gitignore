@@ -12,3 +12,8 @@ out/production/tp2_pm/Carta$Naipe.class
 out/production/tp2_pm/Carta$Valor.class
 out/production/tp2_pm/Carta.class
 out/production/tp2_pm/main.class
+out/production/tp2_pm/Mao.class
+out/production/tp2_pm/excecoes/ExcecaoCartaInvalida.class
+out/production/tp2_pm/excecoes/ExcecaoCartaRepetida.class
+out/production/tp2_pm/excecoes/ExcecaoDinheiroInsuficiente.class
+out/production/tp2_pm/excecoes/ExcecaoMaoInvalida.class
