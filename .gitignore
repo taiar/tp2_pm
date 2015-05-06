@@ -1,0 +1,14 @@
+tp2_pm.iml
+.idea/.name
+.idea/compiler.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/uiDesigner.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/copyright/profiles_settings.xml
+out/production/tp2_pm/Baralho.class
+out/production/tp2_pm/Carta$Naipe.class
+out/production/tp2_pm/Carta$Valor.class
+out/production/tp2_pm/Carta.class
+out/production/tp2_pm/main.class
