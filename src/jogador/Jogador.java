@@ -1,21 +1,38 @@
+package jogador;
+
 import excecoes.ExcecaoDinheiroInsuficiente;
-import excecoes.ExcecaoValorNegativo;
+import jogo.Carta;
 
 public class Jogador {
 
+    private short id;
+    private String nome;
     private int dinheiro;
-    private Carta cartas[] = new Carta[2];
+    private Carta cartas[] = null;
     private boolean inAllin;
 
-    public Jogador(int dinheiro){
+
+    public Jogador(short id, String nome, int dinheiro){
         /* Nao existe um 'set dinheiro'. Assumo que cada jogador vai entrar com a
            mesma quantia na partida, que nao pode ser alterada posteriormente */
+        this.id = id;
+        this.nome = nome;
         this.dinheiro = dinheiro;
         this.inAllin = false;
+        this.cartas = new Carta[2];
     }
 
     public int getDinheiro(){
         return this.dinheiro;
+    }
+
+    public String getNome(){
+        return this.nome;
+    }
+
+    // REMOVER!!!! TESTE!!!!
+    public String mostraCartas(){
+        return this.getNome() + ": " + this.cartas[0] + ", " + this.cartas[1];
     }
 
     public boolean isInAllin(){
@@ -45,10 +62,8 @@ public class Jogador {
         }
     }
 
-    // Neste metodo vou montar as maos de acordo com as cartas na mesa
-    // Pretendo fazer para verificar de 3 a 5 cartas, para que seja possivel
-    // montar maos 'parciais'
-    public void montaMao(Mesa m){
-
+    public void ganhaCartas(Carta a, Carta b){
+        this.cartas[0] = a;
+        this.cartas[1] = b;
     }
 }

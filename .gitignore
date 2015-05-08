@@ -7,12 +7,12 @@ tp2_pm.iml
 .idea/vcs.xml
 .idea/workspace.xml
 .idea/copyright/profiles_settings.xml
-out/production/tp2_pm/Baralho.class
-out/production/tp2_pm/Carta$Naipe.class
-out/production/tp2_pm/Carta$Valor.class
-out/production/tp2_pm/Carta.class
+out/production/tp2_pm/jogo.Baralho.class
+out/production/tp2_pm/jogo.Carta$Naipe.class
+out/production/tp2_pm/jogo.Carta$Valor.class
+out/production/tp2_pm/jogo.Carta.class
 out/production/tp2_pm/main.class
-out/production/tp2_pm/Mao.class
+out/production/tp2_pm/jogador.Mao.class
 out/production/tp2_pm/excecoes/ExcecaoCartaInvalida.class
 out/production/tp2_pm/excecoes/ExcecaoCartaRepetida.class
 out/production/tp2_pm/excecoes/ExcecaoDinheiroInsuficiente.class

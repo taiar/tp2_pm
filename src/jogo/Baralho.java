@@ -1,7 +1,10 @@
+package jogo;
+
 import java.util.Random;
 import java.lang.Math;
 import java.util.Vector;
 import excecoes.ExcecaoCartaRepetida;
+import excecoes.ExcecaoCartasInsuficientes;
 
 
 public class Baralho {
@@ -32,8 +35,6 @@ public class Baralho {
             this.cartas.setElementAt(cartaAtual, indiceAdicao);
         }
 
-        this.imprimeOrdemDasCartas();
-
     }
 
     private void imprimeOrdemDasCartas(){
@@ -56,6 +57,27 @@ public class Baralho {
                 }
             }
         }
+    }
+
+    private Carta getCarta(int posicao) throws ExcecaoCartasInsuficientes{
+        if(this.cartas.size() == 0){
+            throw new ExcecaoCartasInsuficientes();
+        }
+        return this.cartas.remove(posicao);
+    }
+
+    public Carta getCartaTopo(){
+        Carta c = null;
+
+        try{
+            c = this.getCarta(0);
+        }catch (ExcecaoCartasInsuficientes e){
+            System.out.println("Nao e possivel retirar mais cartas do baralho.");
+            System.exit(1);
+        }
+
+        return c;
+
     }
 
 }

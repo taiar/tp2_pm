@@ -1,3 +1,5 @@
+package jogo;
+
 public class Carta {
     public static enum Naipe{
         Copas,

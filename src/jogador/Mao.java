@@ -1,3 +1,4 @@
+package jogador;
 
 public abstract class Mao {
     private short numeroDeCartasMao;
