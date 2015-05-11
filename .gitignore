@@ -17,3 +17,5 @@ out/production/tp2_pm/excecoes/ExcecaoCartaInvalida.class
 out/production/tp2_pm/excecoes/ExcecaoCartaRepetida.class
 out/production/tp2_pm/excecoes/ExcecaoDinheiroInsuficiente.class
 out/production/tp2_pm/excecoes/ExcecaoMaoInvalida.class
+out/production/tp2_pm/excecoes/ExcecaoNumeroInvalidoDeCartasNaMao.class
+out/production/tp2_pm/jogador/MaoDePoquer.class

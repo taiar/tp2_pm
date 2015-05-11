@@ -1,6 +1,7 @@
 package jogo;
+import java.lang.Comparable;
 
-public class Carta {
+public class Carta implements Comparable{
     public static enum Naipe{
         Copas,
         Ouros,
@@ -9,7 +10,6 @@ public class Carta {
     }
 
     public static enum Valor{
-        As,
         Dois,
         Tres,
         Quatro,
@@ -21,7 +21,8 @@ public class Carta {
         Dez,
         Valete,
         Rainha,
-        Rei
+        Rei,
+        As
     }
 
     private Naipe naipe;
@@ -32,7 +33,30 @@ public class Carta {
         this.valor = v;
     }
 
+    public Valor getValor(){
+        return this.valor;
+    }
+
+    public Naipe getNaipe(){
+        return this.naipe;
+    }
+
     public String toString(){
         return this.valor + " de " + this.naipe;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        final int HIGHER_THAN = 1;
+        final int EQUAL_TO = 0;
+        final int LESSER_THAN = -1;
+
+        Carta c = (Carta) o;
+        if (this.getValor().ordinal() > c.getValor().ordinal()) return HIGHER_THAN;
+        if (this.getValor().ordinal() < c.getValor().ordinal()) return LESSER_THAN;
+
+        assert (this.getValor().ordinal() == c.getValor().ordinal());
+
+        return EQUAL_TO;
     }
 }
