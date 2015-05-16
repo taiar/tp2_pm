@@ -15,10 +15,12 @@ public class Mesa {
     public static final int VALOR_PADRAO_BIG_BLIND = 2 * VALOR_PADRAO_SMALL_BLIND;
 
     private static Mesa instanciaMesa = null;
+
     private Carta[] cartas = null;
     private int pote;
     private int dealer;
     private Baralho baralho = null;
+
     private Vector<Jogador> jogadores = null;
     private static String[] nomesJogadores = {"William", "Othelo", "Hamlet",
                                                 "Petruchio", "Horacio", "Ofelia",
@@ -249,6 +251,7 @@ public class Mesa {
         return rodadaDeApostas();
     }
 
+<<<<<<< HEAD
     /**
      * @brief Estado do jogo que envolve a revelacao da quinta carta e subsequentes apostas
      * @return O estado de fim do jogo: acabou ou nao (nao = continua)
@@ -273,5 +276,13 @@ public class Mesa {
         System.out.println("Showdown");
 
         this.mostraCartasNaMesa();
+=======
+    public Vector<Jogador> getJogadores() {
+        return jogadores;
+    }
+
+    public Carta[] getCartas() {
+        return cartas;
+>>>>>>> a7a268d1bc97775d4dc34dcbfc367ff406f3a042
     }
 }

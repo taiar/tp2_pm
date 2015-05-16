@@ -114,4 +114,8 @@ public class Jogador {
         this.ultimaAposta = retornado;
         return retornado;
     }
+
+    public Carta[] getCartas() {
+        return cartas;
+    }
 }
