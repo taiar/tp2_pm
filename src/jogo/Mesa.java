@@ -20,11 +20,11 @@ public class Mesa {
     private int dealer;
     private Baralho baralho = null;
     private Vector<Jogador> jogadores = null;
-    private static String[] nomesJogadores = {"James Bond", "Matt Damon", "Clint Eastwood",
-                                              "Lady Gaga", "Frank Underwood", "Lemmy",
-                                              "Littlefinger", "Batman"};
+    private static String[] nomesJogadores = {"William", "Othelo", "Hamlet",
+                                                "Petruchio", "Horacio", "Ofelia",
+                                              "Catarina", "Romeu"};
 
-    private Mesa(int numeroDeJogadores){
+    private Mesa(int numeroDeJogadores, String nomeJogadorUsuario){
         this.baralho = new Baralho();
         this.baralho.embaralha();
         this.jogadores = new Vector<Jogador>(numeroDeJogadores);
@@ -32,25 +32,35 @@ public class Mesa {
 
         short i = 0;
         for(i = 0; i < numeroDeJogadores; i++){
-            try{
-                this.adicionaJogador(i);
-            }catch(ExcecaoNumeroMaximoJogadores e){
-                System.out.println("ERRO: Numero maximo de jogadores atingido.");
+
+            if(i != 0){
+                this.adicionaJogador(i, nomesJogadores[i]);
+            }else{ // Jogador 0 e o jogador selecionado pelo usuario
+                this.adicionaJogador(i, nomeJogadorUsuario);
             }
+
         }
     }
 
-    private void adicionaJogador(short id) throws ExcecaoNumeroMaximoJogadores{
-        if(this.jogadores.capacity() == NUMERO_MAXIMO_JOGADORES){
+    private void adicionaJogador(short id){
+        /*if(this.jogadores.size() == NUMERO_MAXIMO_JOGADORES){
             throw new ExcecaoNumeroMaximoJogadores();
-        }
+        }*/
 
         this.jogadores.add(new Jogador(id, nomesJogadores[id], QUANTIDADE_PADRAO_DINHEIRO));
     }
 
-    public static Mesa getInstance(int numeroDeJogadores){
+    private void adicionaJogador(short id, String nomeJogador){
+        /*if(this.jogadores.capacity() == NUMERO_MAXIMO_JOGADORES){
+            throw new ExcecaoNumeroMaximoJogadores();
+        }*/
+
+        this.jogadores.add(new Jogador(id, nomeJogador, QUANTIDADE_PADRAO_DINHEIRO));
+    }
+
+    public static Mesa getInstance(int numeroDeJogadores, String nomeJogador){
         if(instanciaMesa == null){
-            instanciaMesa = new Mesa(numeroDeJogadores);
+            instanciaMesa = new Mesa(numeroDeJogadores, nomeJogador);
         }
 
         return instanciaMesa;
@@ -76,8 +86,18 @@ public class Mesa {
         }
     }
 
+    private void mostraCartasNaMesa(){
+        System.out.print("Cartas na mesa:\n| ");
+        for (Carta c : this.cartas) {
+            if (c != null) {
+                System.out.print(c + " | ");
+            }
+        }
+        System.out.println();
+    }
+
     public boolean preFlop(){
-        int numeroDeJogadores = this.jogadores.size();
+        int numeroDeJogadores = this.jogadores.capacity();
 
         int smallBlind = (this.dealer + 1) % numeroDeJogadores;
         int bigBlind = (smallBlind + 1) % numeroDeJogadores;
@@ -85,14 +105,17 @@ public class Mesa {
         int aposta;
 
         // Small Blind aposta
-        Jogador j = this.jogadores.get(smallBlind);
+
+        Jogador j = this.jogadores.remove(smallBlind);
         aposta = j.aposta(VALOR_PADRAO_SMALL_BLIND);
         pote += aposta;
+        this.jogadores.add(smallBlind, j);
 
         // Big Blind aposta
-        j = this.jogadores.get(bigBlind);
+        j = this.jogadores.remove(bigBlind);
         aposta = j.aposta(VALOR_PADRAO_BIG_BLIND);
         pote += aposta;
+        this.jogadores.add(bigBlind, j);
 
         this.distribuiCartas();
 
@@ -190,7 +213,6 @@ public class Mesa {
             System.out.println(temp.getNome() + ": " + temp.getDinheiro());
         }
 
-
         // Se o jogo continuou ate aqui, e falso que ele terminou
         return false;
     }
@@ -203,12 +225,8 @@ public class Mesa {
             this.cartas[i] = this.baralho.getCartaTopo();
         }
 
-        System.out.println("Cartas na mesa: ");
-        for (Carta c : this.cartas) {
-            if (c != null) {
-                System.out.println(c);
-            }
-        }
+        this.mostraCartasNaMesa();
+
         System.out.println("");
 
         return rodadaDeApostas();
@@ -225,14 +243,7 @@ public class Mesa {
         // Revela quarta carta
         this.cartas[3] = this.baralho.getCartaTopo();
 
-        System.out.println("Cartas na mesa: ");
-        for (Carta c : this.cartas) {
-            if (c != null) {
-                System.out.print(c + " ");
-            }
-        }
-        System.out.println("");
-
+        this.mostraCartasNaMesa();
 
         // Se o jogo continuou ate aqui, e falso que ele terminou
         return rodadaDeApostas();
@@ -248,14 +259,7 @@ public class Mesa {
         // Revela quarta carta
         this.cartas[4] = this.baralho.getCartaTopo();
 
-        System.out.println("Cartas na mesa: ");
-        for (Carta c : this.cartas) {
-            if (c != null) {
-                System.out.print(c + " ");
-            }
-        }
-        System.out.println("");
-
+        this.mostraCartasNaMesa();
 
         // Se o jogo continuou ate aqui, e falso que ele terminou
         return rodadaDeApostas();
@@ -268,12 +272,6 @@ public class Mesa {
     public void showdown(){
         System.out.println("Showdown");
 
-        System.out.println("Cartas na mesa: ");
-        for (Carta c : this.cartas) {
-            if (c != null) {
-                System.out.print(c + " ");
-            }
-        }
-        System.out.println("");
+        this.mostraCartasNaMesa();
     }
 }
