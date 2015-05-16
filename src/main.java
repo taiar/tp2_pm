@@ -1,4 +1,5 @@
 import jogo.Mesa;
+import jogo.ReconhecedorDeMao;
 
 public class main {
 
@@ -17,5 +18,12 @@ public class main {
     public static void main(String[] args) {
         Mesa m = Mesa.getInstance(5);
         m.preFlop();
+        m.flop();
+
+        ReconhecedorDeMao r = new ReconhecedorDeMao(m);
+
+        r.mostraCartasJogadores();
+        r.mostraCartasMesa();
+        r.iteraSobreAvaliacoes();
     }
 }

@@ -18,6 +18,11 @@ public class Baralho {
         }
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
     public void embaralha() {
         Random r = new Random();
 

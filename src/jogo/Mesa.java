@@ -15,10 +15,12 @@ public class Mesa {
     public static final int VALOR_PADRAO_BIG_BLIND = 2 * VALOR_PADRAO_SMALL_BLIND;
 
     private static Mesa instanciaMesa = null;
+
     private Carta[] cartas = null;
     private int pote;
     private int dealer;
     private Baralho baralho = null;
+
     private Vector<Jogador> jogadores = null;
     private static String[] nomesJogadores = {"James Bond", "Matt Damon", "Clint Eastwood",
                                               "Lady Gaga", "Frank Underwood", "Lemmy",
@@ -124,4 +126,11 @@ public class Mesa {
         for(int i = 0; i < 3; i++) System.out.println(this.cartas[i]);
     }
 
+    public Vector<Jogador> getJogadores() {
+        return jogadores;
+    }
+
+    public Carta[] getCartas() {
+        return cartas;
+    }
 }
