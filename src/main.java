@@ -23,5 +23,18 @@ public class main {
             return;
         }
         fimDeJogo = m.flop();
+        if(fimDeJogo){
+            return;
+        }
+        fimDeJogo = m.turn();
+        if(fimDeJogo){
+            return;
+        }
+        fimDeJogo = m.river();
+        if(fimDeJogo){
+            return;
+        }
+
+        m.showdown();
     }
 }

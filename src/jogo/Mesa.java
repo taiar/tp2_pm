@@ -40,7 +40,7 @@ public class Mesa {
         }
     }
 
-    public void adicionaJogador(short id) throws ExcecaoNumeroMaximoJogadores{
+    private void adicionaJogador(short id) throws ExcecaoNumeroMaximoJogadores{
         if(this.jogadores.capacity() == NUMERO_MAXIMO_JOGADORES){
             throw new ExcecaoNumeroMaximoJogadores();
         }
@@ -66,7 +66,7 @@ public class Mesa {
         this.pote += quantia;
     }
 
-    public void distribuiCartas(){
+    private void distribuiCartas(){
         for(Jogador j : this.jogadores){
             j.ganhaCartas(this.baralho.getCartaTopo(), this.baralho.getCartaTopo());
         }
@@ -117,33 +117,17 @@ public class Mesa {
             this.jogadores.add(index, j);
         }
 
-        // Mostra estado dos jogadores
-        for(Jogador temp : this.jogadores){
-            System.out.println(temp.getNome() + ": " + temp.getDinheiro());
-        }
-
         // Se o jogo continuou ate aqui, retorna falso
         return false;
     }
 
-    public boolean flop() {
-        System.out.println("Flop");
-
+    private boolean rodadaDeApostas(){
         int numeroDeJogadores = this.jogadores.capacity();
         int aposta;
         // Valor da aposta corrente da rodada (maior aposta)
         int apostaCorrente = 0;
 
-        // Revela cartas na mesa
-        for (int i = 0; i < 3; i++) {
-            this.cartas[i] = this.baralho.getCartaTopo();
-        }
 
-        for (Carta c : this.cartas) {
-            if (c != null) {
-                System.out.println(c);
-            }
-        }
 
         // Procede com a rodada de apostas para cada jogador
         int index;
@@ -209,7 +193,87 @@ public class Mesa {
 
         // Se o jogo continuou ate aqui, e falso que ele terminou
         return false;
+    }
+
+    public boolean flop() {
+        System.out.println("Flop");
+
+        // Revela cartas na mesa
+        for (int i = 0; i < 3; i++) {
+            this.cartas[i] = this.baralho.getCartaTopo();
+        }
+
+        System.out.println("Cartas na mesa: ");
+        for (Carta c : this.cartas) {
+            if (c != null) {
+                System.out.println(c);
+            }
+        }
+        System.out.println("");
+
+        return rodadaDeApostas();
+
     }// Fim Flop
 
+    /**
+     * @brief Estado do jogo que envolve a revelacao da quarta carta e subsequentes apostas
+     * @return O estado de fim do jogo: acabou ou nao (nao = continua)
+     */
+    public boolean turn(){
+        System.out.println("Turn");
 
+        // Revela quarta carta
+        this.cartas[3] = this.baralho.getCartaTopo();
+
+        System.out.println("Cartas na mesa: ");
+        for (Carta c : this.cartas) {
+            if (c != null) {
+                System.out.print(c + " ");
+            }
+        }
+        System.out.println("");
+
+
+        // Se o jogo continuou ate aqui, e falso que ele terminou
+        return rodadaDeApostas();
+    }
+
+    /**
+     * @brief Estado do jogo que envolve a revelacao da quinta carta e subsequentes apostas
+     * @return O estado de fim do jogo: acabou ou nao (nao = continua)
+     */
+    public boolean river(){
+        System.out.println("River");
+
+        // Revela quarta carta
+        this.cartas[4] = this.baralho.getCartaTopo();
+
+        System.out.println("Cartas na mesa: ");
+        for (Carta c : this.cartas) {
+            if (c != null) {
+                System.out.print(c + " ");
+            }
+        }
+        System.out.println("");
+
+
+        // Se o jogo continuou ate aqui, e falso que ele terminou
+        return rodadaDeApostas();
+    }
+
+    /**
+     * @brief Ultima fase do jogo. Jogadores tem suas maos comparadaspara decidir o vencedor
+     * @return O estado de fim do jogo: acabou ou nao (nao = continua)
+     */
+    public void showdown(){
+        System.out.println("Showdown");
+
+        System.out.println("Cartas na mesa: ");
+        for (Carta c : this.cartas) {
+            if (c != null) {
+                System.out.print(c + " ");
+            }
+        }
+        System.out.println("");
+    }
 }
