@@ -11,6 +11,8 @@ public class Jogador {
     private int ultimaAposta;
     private Carta cartas[] = null;
     private boolean inAllin;
+    private boolean estaNaRodada;
+    private boolean estaNoJogo;
 
 
     public Jogador(short id, String nome, int dinheiro){
@@ -21,6 +23,8 @@ public class Jogador {
         this.dinheiro = dinheiro;
         this.inAllin = false;
         this.cartas = new Carta[2];
+        this.estaNoJogo = true;
+        this.estaNaRodada = true;
     }
 
     public int getDinheiro(){
@@ -42,6 +46,28 @@ public class Jogador {
 
     public boolean isInAllin(){
         return this.inAllin;
+    }
+
+    public void entraNaRodada(){
+        this.estaNaRodada = true;
+    }
+
+    public void saiDaRodada(){
+        this.estaNaRodada = false;
+    }
+
+    public boolean isEstaNaRodada() {
+        // Caso o jogador ja tenha saido do jogo ele nao pode estar na rodada
+        if(! this.estaNoJogo){
+            return this.estaNoJogo;
+        }
+
+        return estaNaRodada;
+    }
+
+    public void saiDoJogo(){
+        this.estaNoJogo = false;
+        System.out.println(this.nome + " saiu do jogo");
     }
 
     public void aumentaQuantidadeDinheiro(int quantidade){

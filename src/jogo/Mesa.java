@@ -76,7 +76,7 @@ public class Mesa {
         }
     }
 
-    public void preFlop(){
+    public boolean preFlop(){
         int numeroDeJogadores = this.jogadores.size();
 
         int smallBlind = (this.dealer + 1) % numeroDeJogadores;
@@ -101,27 +101,115 @@ public class Mesa {
         for(int i = 0; i < numeroDeJogadores; i++){
             index = (i + bigBlind + 1) % numeroDeJogadores;
 
-            j = jogadores.get(index);
+            j = this.jogadores.remove(index);
 
             if(! j.isInAllin()){
                 if(j.getUltimaAposta() < VALOR_PADRAO_BIG_BLIND){
                     valorAposta = VALOR_PADRAO_BIG_BLIND - j.getUltimaAposta();
                     aposta = j.aposta(valorAposta);
-                    pote += aposta;
+                    this.pote += aposta;
                     System.out.println("Pote: " + this.pote);
+                    // Se alguem desistir nessa fase, remova-o
+                    // Se todos desistirem, retorna true para encerrar
                 }
             }
 
+            this.jogadores.add(index, j);
         }
 
+        // Mostra estado dos jogadores
+        for(Jogador temp : this.jogadores){
+            System.out.println(temp.getNome() + ": " + temp.getDinheiro());
+        }
+
+        // Se o jogo continuou ate aqui, retorna falso
+        return false;
     }
 
-    public void flop(){
-        for(int i = 0; i < 3; i++){
+    public boolean flop() {
+        System.out.println("Flop");
+
+        int numeroDeJogadores = this.jogadores.capacity();
+        int aposta;
+        // Valor da aposta corrente da rodada (maior aposta)
+        int apostaCorrente = 0;
+
+        // Revela cartas na mesa
+        for (int i = 0; i < 3; i++) {
             this.cartas[i] = this.baralho.getCartaTopo();
         }
 
-        for(int i = 0; i < 3; i++) System.out.println(this.cartas[i]);
-    }
+        for (Carta c : this.cartas) {
+            if (c != null) {
+                System.out.println(c);
+            }
+        }
+
+        // Procede com a rodada de apostas para cada jogador
+        int index;
+        Jogador j;
+        for (int i = 0; i < numeroDeJogadores; i++) {
+            index = (i + dealer + 1) % numeroDeJogadores;
+
+            j = this.jogadores.remove(index);
+
+            if (j.isEstaNaRodada()) {
+                // TODO: apostamos com valor padrao para testes, antes
+                aposta = j.aposta(10);
+                pote += aposta;
+
+                // Se o jogador apostou mais do que os outros, valor da aposta sobe
+                if (apostaCorrente <= aposta) {
+                    apostaCorrente = aposta;
+                } else { // Caso em que o jogador tenta apostar menos do que o anterior
+                    System.out.println("Apostou menos. Tratar isso.");
+
+                    // Se esta em all-in, pode continuar. Senao, foi erro
+                    if (!j.isInAllin()) {
+                        System.out.println("Por enquanto vamos simplesmente remover o jogador.");
+                        j.saiDaRodada();
+                    }
+                }
+            }
+
+            // Substitui o jogador alterado que usamos aqui no vetor, efetivamente processando a acao
+            this.jogadores.add(index, j);
+        }// Fim rodada de apostas
+
+        // Rodada de ajuste de apostas
+        for(int i = 0; i < numeroDeJogadores; i++){
+            index = (i + dealer + 1) % numeroDeJogadores;
+
+            j = this.jogadores.remove(index);
+
+            if (j.isEstaNaRodada()) {
+                // Tem que completar a aposta
+                if(apostaCorrente > j.getUltimaAposta()){
+                    int diferenca = apostaCorrente - j.getUltimaAposta();
+                    // TODO: decisao do jogador de apostar ou nao
+                    /* TODO: Se nao decidir apostar, sai. Quando alguem sair verificar se sobrou
+                       TODO: apenas um jogador */
+                    // Caso decida completar
+                    aposta = j.aposta(diferenca);
+                    pote += aposta;
+                }
+            }
+
+            // Substitui o jogador alterado que usamos aqui no vetor, efetivamente processando a acao
+            this.jogadores.add(index, j);
+        }// Fim da rodada de ajuste de apostas
+
+        System.out.println("Pote: " + this.pote);
+
+        // Mostra estado dos jogadores
+        for(Jogador temp : this.jogadores){
+            System.out.println(temp.getNome() + ": " + temp.getDinheiro());
+        }
+
+
+        // Se o jogo continuou ate aqui, e falso que ele terminou
+        return false;
+    }// Fim Flop
+
 
 }

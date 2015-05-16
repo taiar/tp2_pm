@@ -15,7 +15,13 @@ public class main {
     }
 
     public static void main(String[] args) {
+        boolean fimDeJogo = false;
+
         Mesa m = Mesa.getInstance(5);
-        m.preFlop();
+        fimDeJogo = m.preFlop();
+        if(fimDeJogo){
+            return;
+        }
+        fimDeJogo = m.flop();
     }
 }
