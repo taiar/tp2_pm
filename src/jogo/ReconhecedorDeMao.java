@@ -4,13 +4,31 @@ import jogador.Jogador;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 public class ReconhecedorDeMao {
 
+    /**
+     * Referência para a mesa.
+     */
     private Mesa mesa;
+
+    /**
+     * Referência para os jogadores.
+     */
     private Vector<Jogador> jogadores;
 
+    /**
+     * Descrição da avaliação da mão da rodada.
+     */
+    private int[] mao;
+
+    /**
+     * Ordem de valor das combinações de cartas possíveis.
+     */
     private String[] ordemAvaliacao = {
         "isRoyalStraightFlush",
         "isStraightFlush",
@@ -23,7 +41,7 @@ public class ReconhecedorDeMao {
     };
 
     public ReconhecedorDeMao(Mesa mesa) {
-        this.mesa = mesa.getInstance(0);
+        this.mesa = Mesa.getInstance(0);
         this.jogadores = this.mesa.getJogadores();
     }
 
@@ -41,16 +59,19 @@ public class ReconhecedorDeMao {
         }
     }
 
-    public void iteraSobreAvaliacoes() {
-        int[] valorMaoDeUsuario = new int[this.jogadores.size()];
-        for(Jogador j : this.jogadores) {
-            Carta[] hand = this.mergeMao(j);
-            for (String s : this.ordemAvaliacao) {
+
+    public void calculaMao() {
+        this.mao = new int[this.jogadores.size()];
+        for(int i = 0; i < this.jogadores.size(); i += 1) {
+            Carta[] hand = this.mergeMao(this.jogadores.elementAt(i));
+            this.mao[i] = -1;
+            for (int j = 0; j < this.ordemAvaliacao.length; j += 1) {
                 try {
-                    Method m = this.getClass().getDeclaredMethod(s, Carta[].class);
+                    Method m = this.getClass().getDeclaredMethod(this.ordemAvaliacao[j], Carta[].class);
                     m.setAccessible(true);
                     if((boolean) m.invoke(this, new Object[]{ hand })) {
-
+                        this.mao[i] = j;
+                        continue;
                     }
                 } catch (NoSuchMethodException e) {
                     e.printStackTrace();
@@ -77,17 +98,31 @@ public class ReconhecedorDeMao {
     }
 
     private boolean isRoyalStraightFlush(Carta[] cartas) {
-        System.out.println("isRoyalStraightFlush");
-        return true;
+        Set<Carta> conjunto = new HashSet<Carta>();
+        Collections.addAll(conjunto, cartas);
+        int[] valorNumerico = {12, 11, 10, 9, 8};
+        Carta.Valor[] valoreObjeto = Carta.Valor.values();
+
+        boolean break_flag = false;
+
+        for(Carta.Naipe n : Carta.Naipe.values()) {
+            break_flag = false;
+            for(int i = 0; i < valorNumerico.length; i += 1) {
+                if(!conjunto.contains(new Carta(n, valoreObjeto[valorNumerico[i]]))) {
+                    break_flag = true;
+                    break;
+                }
+            }
+        }
+
+        return !break_flag;
     }
 
     private boolean isStraightFlush(Carta[] cartas) {
-        System.out.println("isStraightFlush");
         return false;
     }
 
     private boolean isFourOfAKind(Carta[] cartas) {
-        System.out.println("isFourOfAKind");
         return true;
     }
 

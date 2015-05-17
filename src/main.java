@@ -24,6 +24,6 @@ public class main {
 
         r.mostraCartasJogadores();
         r.mostraCartasMesa();
-        r.iteraSobreAvaliacoes();
+        r.calculaMao();
     }
 }

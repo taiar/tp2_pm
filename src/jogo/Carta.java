@@ -37,9 +37,13 @@ public class Carta implements Comparable{
         return this.valor;
     }
 
+    public void setValor(Valor v) { this.valor = v; }
+
     public Naipe getNaipe(){
         return this.naipe;
     }
+
+    public void setNaipe(Naipe n) { this.naipe = n; }
 
     public String toString(){
         return this.valor + " de " + this.naipe;
@@ -58,5 +62,19 @@ public class Carta implements Comparable{
         assert (this.getValor().ordinal() == c.getValor().ordinal());
 
         return EQUAL_TO;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        Carta c = (Carta) o;
+        return this.getNaipe() == c.getNaipe() && this.getValor() == c.getValor();
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.valueOf(
+            Integer.toString(this.getValor().ordinal()) +
+            Integer.toString(this.getNaipe().ordinal())
+        );
     }
 }
