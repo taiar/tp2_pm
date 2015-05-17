@@ -116,6 +116,33 @@ public class Mesa {
         }
     }
 
+    public int jogadoresNaRodada(){
+        int jogadoresNaRodada = 0;
+
+        for(Jogador j : this.jogadores){
+            if(j.isEstaNaRodada()){
+                jogadoresNaRodada++;
+            }
+        }
+
+        return jogadoresNaRodada;
+    }
+
+
+    public int achaIndiceUltimoJogador(){
+        // Este metodo so deve ser chamado quando se tem certeza da existencia de apenas um jogador
+        assert this.jogadoresNaRodada() == 1;
+
+        for(int i = 0; i < this.jogadores.size(); i++){
+            if(this.jogadores.get(i).isEstaNaRodada()){
+                return i;
+            }
+        }
+
+        // Nunca sera retornado, levando-se em conta o assert
+        return -1;
+    }
+
     public boolean preFlop(){
         int numeroDeJogadores = this.jogadores.capacity();
 
@@ -132,16 +159,16 @@ public class Mesa {
 
         // Small Blind aposta
 
-        Jogador j = this.jogadores.remove(smallBlind);
+        Jogador j = this.jogadores.get(smallBlind);
         aposta = j.aposta(VALOR_PADRAO_SMALL_BLIND);
         pote += aposta;
-        this.jogadores.add(smallBlind, j);
+        this.jogadores.set(smallBlind, j);
 
         // Big Blind aposta
-        j = this.jogadores.remove(bigBlind);
+        j = this.jogadores.get(bigBlind);
         aposta = j.aposta(VALOR_PADRAO_BIG_BLIND);
         pote += aposta;
-        this.jogadores.add(bigBlind, j);
+        this.jogadores.set(bigBlind, j);
 
         this.distribuiCartas();
 
@@ -150,9 +177,9 @@ public class Mesa {
         for(int i = 0; i < numeroDeJogadores; i++){
             index = (i + bigBlind + 1) % numeroDeJogadores;
 
-            j = this.jogadores.remove(index);
+            j = this.jogadores.get(index);
 
-            if(! j.isInAllin()){
+            if((! j.isInAllin()) && (! j.isEstaNaRodada())){
                 if(j.getUltimaAposta() < VALOR_PADRAO_BIG_BLIND){
                     valorAposta = VALOR_PADRAO_BIG_BLIND - j.getUltimaAposta();
                     if(! (j.getId() == ID_JOGADOR_USUARIO)){
@@ -160,7 +187,7 @@ public class Mesa {
                         this.pote += aposta;
                     }else{ // Jogador usuario
                         System.out.println("Para continuar na rodada, voce deve completar $" + valorAposta);
-                        System.out.println("Completa " + valorAposta + "? <s/n>");
+                        System.out.println("Você tem $" + j.getDinheiro() + ". Completa " + valorAposta + "? <s/n>");
 
                         String opcao = sc.next();
 
@@ -173,20 +200,36 @@ public class Mesa {
 
                         if(opcao.equals("n")){ // desistiu da rodada
                             j.saiDaRodada();
+
+                            int naRodada = 0;
+
+                            // Verifica se ha mais de um jogador
+                            if(this.jogadoresNaRodada() == 1){
+                                int indiceUltimoJogador = this.achaIndiceUltimoJogador();
+                                Jogador temp = this.jogadores.get(indiceUltimoJogador);
+                                temp.aumentaQuantidadeDinheiro(this.pote);
+                                System.out.println("Jogador " + temp.getNome() + " ganhou o jogo.");
+                                this.pote = 0;
+                                this.jogadores.set(index, j);
+                                this.jogadores.set(indiceUltimoJogador, temp);
+                                this.mostraEstadoJogadores();
+
+                                // Retorna, mostrando que o jogo acabou
+                                return true;
+                            }
+
                         }else{
                             aposta = j.aposta(valorAposta);
                             this.pote += aposta;
                         }
                     }
-
-                    // Se alguem desistir nessa fase, remova-o
-                    // Se todos desistirem, retorna true para encerrar
                 }
             } else {
                 System.out.println(j.getNome() + " esta em all-in neste jogo.");
             }
 
-            this.jogadores.add(index, j);
+            // Devolve jogador alterado ao seu lugar no vetor
+            this.jogadores.set(index, j);
 
             System.out.println("Pote: " + this.pote);
         }
@@ -200,6 +243,7 @@ public class Mesa {
         int aposta;
         // Valor da aposta corrente da rodada (maior aposta)
         int apostaCorrente = 0;
+        Scanner sc = new Scanner(System.in);
 
         // Procede com a rodada de apostas para cada jogador
         int index;
@@ -207,36 +251,44 @@ public class Mesa {
         for (int i = 0; i < numeroDeJogadores; i++) {
             index = (i + dealer + 1) % numeroDeJogadores;
 
-            j = this.jogadores.remove(index);
+            j = this.jogadores.get(index);
 
-            if (j.isEstaNaRodada()) {
-                // TODO: apostamos com valor padrao para testes, antes
-                aposta = j.aposta(10);
-                pote += aposta;
+            if(! (j.getId() == ID_JOGADOR_USUARIO)){
+                aposta = j.aposta(j.geraValorAposta());
 
-                // Se o jogador apostou mais do que os outros, valor da aposta sobe
-                if (apostaCorrente <= aposta) {
+                // Assumo que neste caso o jogador quer desistir
+                if(aposta < apostaCorrente){
+                    j.aumentaQuantidadeDinheiro(aposta);
+                    aposta = 0;
+                    j.saiDaRodada();
+                }else{// Continua na rodada
                     apostaCorrente = aposta;
-                } else { // Caso em que o jogador tenta apostar menos do que o anterior
-                    System.out.println("Apostou menos. Tratar isso.");
-
-                    // Se esta em all-in, pode continuar. Senao, foi erro
-                    if (!j.isInAllin()) {
-                        System.out.println("Por enquanto vamos simplesmente remover o jogador.");
-                        j.saiDaRodada();
-                    }
+                    System.out.println(j.getNome() + " apostou $" + aposta);
                 }
+
+                this.pote += aposta;
+            }else { // Jogador usuario
+                System.out.println("Para continuar na rodada, voce deve completar pelo menos $" + apostaCorrente);
+                System.out.println("Você tem $" + j.getDinheiro());
+                System.out.println("O que deseja fazer? Digite um valor menor do que a aposta corrente" +
+                        " para sair da rodada sem gastar nada ou um valor maior ou igual para continuar.");
+
+                aposta = sc.nextInt();
+
+                /*if(aposta > j.getDinheiro()){
+                    System.out.println("Voce resolveu apostar " + aposta)
+                }*/
             }
 
             // Substitui o jogador alterado que usamos aqui no vetor, efetivamente processando a acao
-            this.jogadores.add(index, j);
+            this.jogadores.set(index, j);
         }// Fim rodada de apostas
 
         // Rodada de ajuste de apostas
         for(int i = 0; i < numeroDeJogadores; i++){
             index = (i + dealer + 1) % numeroDeJogadores;
 
-            j = this.jogadores.remove(index);
+            j = this.jogadores.get(index);
 
             if (j.isEstaNaRodada()) {
                 // Tem que completar a aposta
@@ -252,7 +304,7 @@ public class Mesa {
             }
 
             // Substitui o jogador alterado que usamos aqui no vetor, efetivamente processando a acao
-            this.jogadores.add(index, j);
+            this.jogadores.set(index, j);
         }// Fim da rodada de ajuste de apostas
 
         System.out.println("Pote: " + this.pote);
@@ -272,8 +324,6 @@ public class Mesa {
         }
 
         this.mostraCartasNaMesa();
-
-        System.out.println("");
 
         return rodadaDeApostas();
 

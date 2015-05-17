@@ -2,6 +2,7 @@ package jogador;
 
 import excecoes.ExcecaoDinheiroInsuficiente;
 import jogo.Carta;
+import java.util.Random;
 
 public class Jogador {
 
@@ -74,6 +75,13 @@ public class Jogador {
         return this.estaNoJogo;
     }
 
+    // Gera um valor aleatorio para aposta
+    public int geraValorAposta(){
+        Random r = new Random();
+        int valorCartas = this.cartas[0].getValor().ordinal() + this.cartas[1].getValor().ordinal();
+        return valorCartas + (r.nextInt() % 20);
+    }
+
     public void saiDoJogo(){
         this.estaNoJogo = false;
         System.out.println(this.nome + " saiu do jogo");
@@ -81,7 +89,8 @@ public class Jogador {
 
     public void aumentaQuantidadeDinheiro(int quantidade){
         /* Utilizo uma assercao porque assumo que este metodo sera chamado apenas
-         *  quando um jogador ganhar o pote, o que sempre e um valor maior que 0 */
+         *  quando um jogador ganhar o pote ou ter aposta devolvida, o que sempre
+         *  e um valor maior que 0 */
         assert quantidade > 0;
 
         this.dinheiro += quantidade;
