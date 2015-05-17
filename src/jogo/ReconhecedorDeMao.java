@@ -35,6 +35,7 @@ public class ReconhecedorDeMao {
         "isFlush",
         "isStraight",
         "isThreeOfAKind",
+        "isTwoPairs",
         "isOnePair"
     };
 
@@ -155,23 +156,45 @@ public class ReconhecedorDeMao {
     }
 
     private boolean isFullHouse(Carta[] cartas) {
-        return true;
+        return false;
     }
 
     private boolean isFlush(Carta[] cartas) {
-        return true;
+        return false;
     }
 
     private boolean isStraight(Carta[] cartas) {
-        return true;
+        return false;
     }
 
     private boolean isThreeOfAKind(Carta[] cartas) {
-        return true;
+        return false;
     }
 
     private boolean isTwoPairs(Carta[] cartas) {
-        return true;
+        Set<Carta> conjunto = new HashSet<Carta>();
+        Collections.addAll(conjunto, cartas);
+        ArrayList<Carta.Naipe> naipes = new ArrayList<>(Arrays.asList(Carta.Naipe.values()));
+        boolean flag_temUmPar = false;
+
+        for(int i = 0; i < cartas.length; i += 1) {
+            ArrayList<Carta.Naipe> naipeRestante = (ArrayList<Carta.Naipe>) naipes.clone();
+            naipeRestante.remove(cartas[i].getNaipe());
+            for(int j = 0; j < naipeRestante.size(); j += 1){
+                Carta checkContains = new Carta(naipeRestante.get(j), cartas[i].getValor());
+                if(conjunto.contains(checkContains)) {
+                    conjunto.remove(cartas[i]);
+                    conjunto.remove(checkContains);
+                    flag_temUmPar = true;
+                    break;
+                }
+            }
+        }
+
+        if(!flag_temUmPar)
+            return false;
+
+        return this.isOnePair(conjunto.toArray(new Carta[conjunto.size()]));
     }
 
     private boolean isOnePair(Carta[] cartas) {
