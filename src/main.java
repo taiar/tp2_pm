@@ -25,5 +25,6 @@ public class main {
         r.mostraCartasJogadores();
         r.mostraCartasMesa();
         r.calculaMao();
+        r.resultado();
     }
 }

@@ -1,13 +1,11 @@
 package jogo;
 
+import com.sun.deploy.util.ArrayUtil;
 import jogador.Jogador;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 public class ReconhecedorDeMao {
 
@@ -69,9 +67,10 @@ public class ReconhecedorDeMao {
                 try {
                     Method m = this.getClass().getDeclaredMethod(this.ordemAvaliacao[j], Carta[].class);
                     m.setAccessible(true);
-                    if((boolean) m.invoke(this, new Object[]{ hand })) {
+                    Object result = m.invoke(this, new Object[]{ hand });
+                    if((boolean) result) {
                         this.mao[i] = j;
-                        continue;
+                        break;
                     }
                 } catch (NoSuchMethodException e) {
                     e.printStackTrace();
@@ -82,6 +81,20 @@ public class ReconhecedorDeMao {
                 }
             }
         }
+    }
+
+    public void resultado() {
+        int winnerIndex = -1;
+        int melhorAvaliacao = 100;
+
+        for (int i = 0; i < this.mao.length; i += 1)
+            if(this.mao[i] < melhorAvaliacao) {
+                winnerIndex = i;
+                melhorAvaliacao = this.mao[i];
+            }
+
+        System.out.println("Jogo ganho por: " + this.jogadores.elementAt(winnerIndex).getNome());
+        System.out.println("Jogo ganho com: " + this.ordemAvaliacao[melhorAvaliacao]);
     }
 
     private Carta[] mergeMao(Jogador j) {
@@ -100,6 +113,7 @@ public class ReconhecedorDeMao {
     private boolean isRoyalStraightFlush(Carta[] cartas) {
         Set<Carta> conjunto = new HashSet<Carta>();
         Collections.addAll(conjunto, cartas);
+
         int[] valorNumerico = {12, 11, 10, 9, 8};
         Carta.Valor[] valoreObjeto = Carta.Valor.values();
 
@@ -123,7 +137,21 @@ public class ReconhecedorDeMao {
     }
 
     private boolean isFourOfAKind(Carta[] cartas) {
-        return true;
+        Set<Carta> conjunto = new HashSet<Carta>();
+        Collections.addAll(conjunto, cartas);
+
+        for (int j = 0; j < cartas.length; j += 1) {
+            Carta.Valor v = cartas[j].getValor();
+            ArrayList<Carta> four = new ArrayList<Carta>();
+            four.add(new Carta(Carta.Naipe.Espadas, v));
+            four.add(new Carta(Carta.Naipe.Paus, v));
+            four.add(new Carta(Carta.Naipe.Ouros, v));
+            four.add(new Carta(Carta.Naipe.Copas, v));
+            if(conjunto.containsAll(four)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isFullHouse(Carta[] cartas) {
@@ -147,6 +175,19 @@ public class ReconhecedorDeMao {
     }
 
     private boolean isOnePair(Carta[] cartas) {
-        return true;
+        Set<Carta> conjunto = new HashSet<Carta>();
+        Collections.addAll(conjunto, cartas);
+        ArrayList<Carta.Naipe> naipes = new ArrayList<>(Arrays.asList(Carta.Naipe.values()));
+
+        for(int i = 0; i < cartas.length; i += 1) {
+            ArrayList<Carta.Naipe> naipeRestante = (ArrayList<Carta.Naipe>) naipes.clone();
+            naipeRestante.remove(cartas[i].getNaipe());
+            for(int j = 0; j < naipeRestante.size(); j += 1){
+                if(conjunto.contains(new Carta(naipeRestante.get(j), cartas[i].getValor())))
+                    return true;
+            }
+        }
+
+        return false;
     }
 }
