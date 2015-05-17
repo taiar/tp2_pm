@@ -1,9 +1,6 @@
 import jogo.Mesa;
-<<<<<<< HEAD
 import java.util.Scanner;
-=======
 import jogo.ReconhecedorDeMao;
->>>>>>> a7a268d1bc97775d4dc34dcbfc367ff406f3a042
 
 public class main {
 
@@ -20,7 +17,6 @@ public class main {
     }
 
     public static void main(String[] args) {
-<<<<<<< HEAD
         boolean fimDeJogo = false;
         Scanner sc = new Scanner(System.in);
 
@@ -47,7 +43,8 @@ public class main {
         }
 
         m.showdown();
-=======
+
+        /*
         Mesa m = Mesa.getInstance(5);
         m.preFlop();
         m.flop();
@@ -57,6 +54,6 @@ public class main {
         r.mostraCartasJogadores();
         r.mostraCartasMesa();
         r.iteraSobreAvaliacoes();
->>>>>>> a7a268d1bc97775d4dc34dcbfc367ff406f3a042
+        */
     }
 }

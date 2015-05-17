@@ -22,7 +22,7 @@ public class ReconhecedorDeMao {
     };
 
     public ReconhecedorDeMao(Mesa mesa) {
-        this.mesa = mesa.getInstance(550);
+        //this.mesa = mesa.getInstance(550);
         this.jogadores = this.mesa.getJogadores();
     }
 

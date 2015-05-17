@@ -31,6 +31,10 @@ public class Jogador {
         return this.dinheiro;
     }
 
+    public int getId(){
+        return this.id;
+    }
+
     public String getNome(){
         return this.nome;
     }
@@ -53,6 +57,7 @@ public class Jogador {
     }
 
     public void saiDaRodada(){
+        System.out.println(this.nome + " saiu da rodada.");
         this.estaNaRodada = false;
     }
 
@@ -63,6 +68,10 @@ public class Jogador {
         }
 
         return estaNaRodada;
+    }
+
+    public boolean isEstaNoJogo(){
+        return this.estaNoJogo;
     }
 
     public void saiDoJogo(){

@@ -1,6 +1,7 @@
 package jogo;
 
 import excecoes.ExcecaoNumeroMaximoJogadores;
+import java.util.Scanner;
 
 import jogador.Jogador;
 import java.util.Vector;
@@ -13,6 +14,7 @@ public class Mesa {
     public static final int NUMERO_TOTAL_CARTAS_PUBLICAS = 5;
     public static final int VALOR_PADRAO_SMALL_BLIND = 5;
     public static final int VALOR_PADRAO_BIG_BLIND = 2 * VALOR_PADRAO_SMALL_BLIND;
+    public static final int ID_JOGADOR_USUARIO = 0;
 
     private static Mesa instanciaMesa = null;
 
@@ -31,16 +33,16 @@ public class Mesa {
         this.baralho.embaralha();
         this.jogadores = new Vector<Jogador>(numeroDeJogadores);
         this.cartas = new Carta[NUMERO_TOTAL_CARTAS_PUBLICAS];
+        this.dealer = 0;
 
+        // Inicializa jogadores
         short i = 0;
         for(i = 0; i < numeroDeJogadores; i++){
-
             if(i != 0){
                 this.adicionaJogador(i, nomesJogadores[i]);
             }else{ // Jogador 0 e o jogador selecionado pelo usuario
                 this.adicionaJogador(i, nomeJogadorUsuario);
             }
-
         }
     }
 
@@ -98,11 +100,33 @@ public class Mesa {
         System.out.println();
     }
 
+    public void mostraEstadoJogadores(){
+        // Mostra estado dos jogadores
+        String estado;
+        for(Jogador temp : this.jogadores){
+            estado = temp.getNome() + ": " + temp.getDinheiro();
+
+            if(temp.isEstaNoJogo()){
+                if(! temp.isEstaNaRodada()){
+                    estado = "X " + estado;
+                }
+
+                System.out.println(estado);
+            }
+        }
+    }
+
     public boolean preFlop(){
         int numeroDeJogadores = this.jogadores.capacity();
 
         int smallBlind = (this.dealer + 1) % numeroDeJogadores;
         int bigBlind = (smallBlind + 1) % numeroDeJogadores;
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println(this.jogadores.get(this.dealer).getNome() + " e o dealer.");
+        System.out.println(this.jogadores.get(smallBlind).getNome() + " e o small blind.");
+        System.out.println(this.jogadores.get(bigBlind).getNome() + " e o big blind.");
 
         int aposta;
 
@@ -131,15 +155,40 @@ public class Mesa {
             if(! j.isInAllin()){
                 if(j.getUltimaAposta() < VALOR_PADRAO_BIG_BLIND){
                     valorAposta = VALOR_PADRAO_BIG_BLIND - j.getUltimaAposta();
-                    aposta = j.aposta(valorAposta);
-                    this.pote += aposta;
-                    System.out.println("Pote: " + this.pote);
+                    if(! (j.getId() == ID_JOGADOR_USUARIO)){
+                        aposta = j.aposta(valorAposta);
+                        this.pote += aposta;
+                    }else{ // Jogador usuario
+                        System.out.println("Para continuar na rodada, voce deve completar $" + valorAposta);
+                        System.out.println("Completa " + valorAposta + "? <s/n>");
+
+                        String opcao = sc.next();
+
+                        while ((! opcao.equals("s")) && (! opcao.equals("n"))){
+                            System.out.println("Opcao '" + opcao + "' invalida.");
+                            System.out.println("Para continuar na rodada, voce deve completar $" + valorAposta);
+                            System.out.println("Completa " + valorAposta + "? <s/n>");
+                            opcao = sc.next();
+                        }
+
+                        if(opcao.equals("n")){ // desistiu da rodada
+                            j.saiDaRodada();
+                        }else{
+                            aposta = j.aposta(valorAposta);
+                            this.pote += aposta;
+                        }
+                    }
+
                     // Se alguem desistir nessa fase, remova-o
                     // Se todos desistirem, retorna true para encerrar
                 }
+            } else {
+                System.out.println(j.getNome() + " esta em all-in neste jogo.");
             }
 
             this.jogadores.add(index, j);
+
+            System.out.println("Pote: " + this.pote);
         }
 
         // Se o jogo continuou ate aqui, retorna falso
@@ -151,8 +200,6 @@ public class Mesa {
         int aposta;
         // Valor da aposta corrente da rodada (maior aposta)
         int apostaCorrente = 0;
-
-
 
         // Procede com a rodada de apostas para cada jogador
         int index;
@@ -210,10 +257,7 @@ public class Mesa {
 
         System.out.println("Pote: " + this.pote);
 
-        // Mostra estado dos jogadores
-        for(Jogador temp : this.jogadores){
-            System.out.println(temp.getNome() + ": " + temp.getDinheiro());
-        }
+        this.mostraEstadoJogadores();
 
         // Se o jogo continuou ate aqui, e falso que ele terminou
         return false;
@@ -251,7 +295,6 @@ public class Mesa {
         return rodadaDeApostas();
     }
 
-<<<<<<< HEAD
     /**
      * @brief Estado do jogo que envolve a revelacao da quinta carta e subsequentes apostas
      * @return O estado de fim do jogo: acabou ou nao (nao = continua)
@@ -272,17 +315,17 @@ public class Mesa {
      * @brief Ultima fase do jogo. Jogadores tem suas maos comparadaspara decidir o vencedor
      * @return O estado de fim do jogo: acabou ou nao (nao = continua)
      */
-    public void showdown(){
+    public void showdown() {
         System.out.println("Showdown");
 
         this.mostraCartasNaMesa();
-=======
+    }
+
     public Vector<Jogador> getJogadores() {
         return jogadores;
     }
 
     public Carta[] getCartas() {
         return cartas;
->>>>>>> a7a268d1bc97775d4dc34dcbfc367ff406f3a042
     }
 }
