@@ -10,6 +10,7 @@ public class ReconhecedorDeMao {
 
     private Mesa mesa;
     private Vector<Jogador> jogadores;
+
     private String[] ordemAvaliacao = {
         "isRoyalStraightFlush",
         "isStraightFlush",
@@ -22,7 +23,7 @@ public class ReconhecedorDeMao {
     };
 
     public ReconhecedorDeMao(Mesa mesa) {
-        this.mesa = mesa.getInstance(550);
+        this.mesa = mesa.getInstance(0);
         this.jogadores = this.mesa.getJogadores();
     }
 
@@ -41,58 +42,76 @@ public class ReconhecedorDeMao {
     }
 
     public void iteraSobreAvaliacoes() {
-        for(String s : this.ordemAvaliacao) {
-            try {
-                Method m = this.getClass().getDeclaredMethod(s);
-                m.setAccessible(true);
-                m.invoke(this);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+        int[] valorMaoDeUsuario = new int[this.jogadores.size()];
+        for(Jogador j : this.jogadores) {
+            Carta[] hand = this.mergeMao(j);
+            for (String s : this.ordemAvaliacao) {
+                try {
+                    Method m = this.getClass().getDeclaredMethod(s, Carta[].class);
+                    m.setAccessible(true);
+                    if((boolean) m.invoke(this, new Object[]{ hand })) {
 
+                    }
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
-    private boolean isRoyalStraightFlush() {
+    private Carta[] mergeMao(Jogador j) {
+        Carta[] mao = new Carta[7];
+        int iCarta = 0;
+        for(int i = 0; i < j.getCartas().length; i += 1) {
+            mao[i] = j.getCartas()[i];
+            iCarta += 1;
+        }
+        for(int i = 0; i < mesa.getCartas().length; i += 1)
+            mao[i + iCarta] = this.mesa.getCartas()[i];
+
+        return mao;
+    }
+
+    private boolean isRoyalStraightFlush(Carta[] cartas) {
         System.out.println("isRoyalStraightFlush");
         return true;
     }
 
-    private boolean isStraightFlush() {
+    private boolean isStraightFlush(Carta[] cartas) {
         System.out.println("isStraightFlush");
-        return true;
+        return false;
     }
 
-    private boolean isFourOfAKind() {
+    private boolean isFourOfAKind(Carta[] cartas) {
         System.out.println("isFourOfAKind");
         return true;
     }
 
-    private boolean isFullHouse() {
+    private boolean isFullHouse(Carta[] cartas) {
         return true;
     }
 
-    private boolean isFlush() {
+    private boolean isFlush(Carta[] cartas) {
         return true;
     }
 
-    private boolean isStraight() {
+    private boolean isStraight(Carta[] cartas) {
         return true;
     }
 
-    private boolean isThreeOfAKind() {
+    private boolean isThreeOfAKind(Carta[] cartas) {
         return true;
     }
 
-    private boolean isTwoPairs() {
+    private boolean isTwoPairs(Carta[] cartas) {
         return true;
     }
 
-    private boolean isOnePair() {
+    private boolean isOnePair(Carta[] cartas) {
         return true;
     }
 }
