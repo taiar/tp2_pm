@@ -94,8 +94,8 @@ public class ReconhecedorDeMao {
                 melhorAvaliacao = this.mao[i];
             }
 
-        System.out.println("Jogo ganho por: " + this.jogadores.elementAt(winnerIndex).getNome());
-        System.out.println("Jogo ganho com: " + this.ordemAvaliacao[melhorAvaliacao]);
+//        System.out.println("Jogo ganho por: " + this.jogadores.elementAt(winnerIndex).getNome());
+//        System.out.println("Jogo ganho com: " + this.ordemAvaliacao[melhorAvaliacao]);
     }
 
     private Carta[] mergeMao(Jogador j) {
@@ -168,6 +168,23 @@ public class ReconhecedorDeMao {
     }
 
     private boolean isThreeOfAKind(Carta[] cartas) {
+        Set<Carta> conjunto = new HashSet<Carta>();
+        Collections.addAll(conjunto, cartas);
+        ArrayList<Carta.Naipe> naipes = new ArrayList<>(Arrays.asList(Carta.Naipe.values()));
+        int somaContains;
+
+        for(int i = 0; i < cartas.length; i += 1) {
+            somaContains = 0;
+            ArrayList<Carta.Naipe> naipeRestante = (ArrayList<Carta.Naipe>) naipes.clone();
+            naipeRestante.remove(cartas[i].getNaipe());
+            for(int j = 0; j < naipeRestante.size(); j += 1){
+                if(conjunto.contains(new Carta(naipeRestante.get(j), cartas[i].getValor())))
+                    somaContains += 1;
+            }
+            if(somaContains >= 2)
+                return true;
+        }
+
         return false;
     }
 
