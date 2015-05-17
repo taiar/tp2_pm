@@ -179,7 +179,7 @@ public class Mesa {
 
             j = this.jogadores.get(index);
 
-            if((! j.isInAllin()) && (! j.isEstaNaRodada())){
+            if((! j.isInAllin()) && (j.isEstaNaRodada())){
                 if(j.getUltimaAposta() < VALOR_PADRAO_BIG_BLIND){
                     valorAposta = VALOR_PADRAO_BIG_BLIND - j.getUltimaAposta();
                     if(! (j.getId() == ID_JOGADOR_USUARIO)){
@@ -240,7 +240,7 @@ public class Mesa {
 
     private boolean rodadaDeApostas(){
         int numeroDeJogadores = this.jogadores.capacity();
-        int aposta;
+        int aposta = 0;
         // Valor da aposta corrente da rodada (maior aposta)
         int apostaCorrente = 0;
         Scanner sc = new Scanner(System.in);
@@ -253,37 +253,62 @@ public class Mesa {
 
             j = this.jogadores.get(index);
 
-            if(! (j.getId() == ID_JOGADOR_USUARIO)){
-                aposta = j.aposta(j.geraValorAposta());
+            if(j.isEstaNaRodada()) { // so contabilizo jogadores que estao na rodada
+                if(! (j.getId() == ID_JOGADOR_USUARIO)){ // Jogador da maquina
+                    aposta = j.aposta(j.geraValorAposta());
 
-                // Assumo que neste caso o jogador quer desistir
-                if(aposta < apostaCorrente){
-                    j.aumentaQuantidadeDinheiro(aposta);
-                    aposta = 0;
-                    j.saiDaRodada();
-                }else{// Continua na rodada
+                    // Assumo que neste caso o jogador quer desistir
+                    if(aposta < apostaCorrente){
+                        j.aumentaQuantidadeDinheiro(aposta);
+                        aposta = 0;
+                        j.saiDaRodada();
+                    }else{// Continua na rodada
+                        apostaCorrente = aposta;
+                        System.out.println(j.getNome() + " apostou $" + aposta);
+                    }
+
+                }else { // Jogador usuario
+                    System.out.println("Para continuar na rodada, voce deve completar pelo menos $" + apostaCorrente);
+                    System.out.println("Você tem $" + j.getDinheiro());
+                    System.out.println("O que deseja fazer?\nDigite um valor menor do que a aposta corrente" +
+                            " para sair da rodada sem gastar nada,\nou um valor maior ou igual para continuar.");
+
+                    aposta = sc.nextInt();
+
+                    if(aposta > j.getDinheiro()){ // Apostou mais do que tem / all-in
+                        System.out.println("Voce resolveu apostar $" + aposta + ", mas tem apenas" +
+                                " $" + j.getDinheiro() + ". Assim, voce ira apostar sua quantia total" +
+                                " e entrar em All-in");
+
+                        aposta = j.getDinheiro();
+                        aposta = j.aposta(aposta);
+                        System.out.println("Voce esta apostando $" + aposta);
+                    }else if(aposta < apostaCorrente){
+                        System.out.println("A aposta corrente minima para continuar e $" + apostaCorrente + ". " +
+                                "\nComo voce tem mais dinheiro do que este valor, interpreto que deseja sair da" +
+                                " rodada.\nVoce nao gastou nada, mas esta fora desta rodada.");
+                        aposta = 0;
+                        j.saiDaRodada();
+                    }
+                }
+
+                // Recalcula aposta corrente
+                if(apostaCorrente < aposta){
+                    System.out.println(j.getNome() + " aumentou o valor da aposta do turno de $" +
+                            + apostaCorrente + " para $" + aposta);
                     apostaCorrente = aposta;
-                    System.out.println(j.getNome() + " apostou $" + aposta);
                 }
 
                 this.pote += aposta;
-            }else { // Jogador usuario
-                System.out.println("Para continuar na rodada, voce deve completar pelo menos $" + apostaCorrente);
-                System.out.println("Você tem $" + j.getDinheiro());
-                System.out.println("O que deseja fazer? Digite um valor menor do que a aposta corrente" +
-                        " para sair da rodada sem gastar nada ou um valor maior ou igual para continuar.");
 
-                aposta = sc.nextInt();
+                // Substitui o jogador alterado que usamos aqui no vetor, efetivamente processando a acao
+                this.jogadores.set(index, j);
+            }// END if jogador esta na rodada
 
-                /*if(aposta > j.getDinheiro()){
-                    System.out.println("Voce resolveu apostar " + aposta)
-                }*/
-            }
-
-            // Substitui o jogador alterado que usamos aqui no vetor, efetivamente processando a acao
-            this.jogadores.set(index, j);
         }// Fim rodada de apostas
 
+
+        System.out.println("Rodada de ajuste de apostas");
         // Rodada de ajuste de apostas
         for(int i = 0; i < numeroDeJogadores; i++){
             index = (i + dealer + 1) % numeroDeJogadores;
@@ -310,6 +335,13 @@ public class Mesa {
         System.out.println("Pote: " + this.pote);
 
         this.mostraEstadoJogadores();
+
+        // Espera interacao com o usuario para partir para a proxima fase
+        System.out.println("Fim do turno. Pressione ENTER para prosseguir.");
+        String exitCode = sc.nextLine();
+        while ((exitCode = sc.nextLine()).length() > 0){
+            exitCode = sc.nextLine();
+        }
 
         // Se o jogo continuou ate aqui, e falso que ele terminou
         return false;
