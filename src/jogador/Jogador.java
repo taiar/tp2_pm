@@ -44,9 +44,8 @@ public class Jogador {
         return this.ultimaAposta;
     }
 
-    // REMOVER!!!! TESTE!!!!
     public String mostraCartas(){
-        return this.getNome() + ": " + this.cartas[0] + ", " + this.cartas[1];
+        return this.cartas[0] + ", " + this.cartas[1];
     }
 
     public boolean isInAllin(){
@@ -120,13 +119,19 @@ public class Jogador {
         int retornado;
 
         if(this.dinheiro < valor){
-            System.out.println("Tentou apostar mais do que tinha. Deseja ficar em all-in?");
+            System.out.println("Tentou apostar mais do que tinha. Ira apostar seu total, $" +
+                this.dinheiro + " e ficar em all-in");
             this.inAllin = true;
             retornado = this.dinheiro;
             this.dinheiro = 0;
         }else{
             retornado = valor;
             this.dinheiro -= retornado;
+            if(this.dinheiro == 0){
+
+                this.inAllin = true;
+                System.out.println(this.nome + " esta com $0 agora, em All-in.");
+            }
         }
 
         this.ultimaAposta = retornado;
