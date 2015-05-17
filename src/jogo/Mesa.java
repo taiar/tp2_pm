@@ -283,12 +283,14 @@ public class Mesa {
                         aposta = j.getDinheiro();
                         aposta = j.aposta(aposta);
                         System.out.println("Voce esta apostando $" + aposta);
-                    }else if(aposta < apostaCorrente){
+                    }else if(aposta < apostaCorrente){ // Apostou menos do que tem, sai
                         System.out.println("A aposta corrente minima para continuar e $" + apostaCorrente + ". " +
                                 "\nComo voce tem mais dinheiro do que este valor, interpreto que deseja sair da" +
                                 " rodada.\nVoce nao gastou nada, mas esta fora desta rodada.");
                         aposta = 0;
                         j.saiDaRodada();
+                    }else{// Aposta valida
+                        aposta = j.aposta(aposta);
                     }
                 }
 
