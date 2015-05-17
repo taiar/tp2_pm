@@ -189,6 +189,7 @@ public class ReconhecedorDeMao {
                     break;
                 }
             }
+            if(flag_temUmPar) break;
         }
 
         if(!flag_temUmPar)
