@@ -494,6 +494,14 @@ public class Mesa {
         System.out.println("==========> Ultima Fase: Showdown <==========");
 
         this.mostraCartasNaMesa();
+
+        ReconhecedorDeMao r = new ReconhecedorDeMao();
+        r.calculaMao();
+        Jogador j = r.resultado();
+        System.out.println("Ganhador: " + r.getJogadorVencedor().getNome());
+        System.out.println("Jogada vencedora: " + r.getJogadaVencedora());
+        for(Carta carta : r.getMaoVencedora())
+            System.out.print(carta + ",");
     }
 
     public Vector<Jogador> getJogadores() {

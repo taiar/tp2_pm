@@ -23,6 +23,12 @@ public class ReconhecedorDeMao {
      */
     private int[] mao;
 
+    private Jogador jogadorVencedor;
+
+    private String jogadaVencedora;
+
+    private Carta[] maoVencedora;
+
     /**
      * Ordem de valor das combinações de cartas possíveis.
      */
@@ -38,7 +44,7 @@ public class ReconhecedorDeMao {
         "isOnePair"
     };
 
-    public ReconhecedorDeMao(Mesa mesa) {
+    public ReconhecedorDeMao() {
         this.mesa = Mesa.getInstance(0, "");
         this.jogadores = this.mesa.getJogadores();
     }
@@ -56,7 +62,6 @@ public class ReconhecedorDeMao {
             System.out.println(cartasMesa[i]);
         }
     }
-
 
     public void calculaMao() {
         this.mao = new int[this.jogadores.size()];
@@ -93,7 +98,23 @@ public class ReconhecedorDeMao {
                 melhorAvaliacao = this.mao[i];
             }
 
+        this.jogadorVencedor = this.jogadores.elementAt(winnerIndex);
+        this.jogadaVencedora = this.ordemAvaliacao[melhorAvaliacao];
+        this.maoVencedora = this.mergeMao(this.jogadorVencedor);
+
         return this.jogadores.elementAt(winnerIndex);
+    }
+
+    public Jogador getJogadorVencedor() {
+        return this.jogadorVencedor;
+    }
+
+    public String getJogadaVencedora() {
+        return this.jogadaVencedora;
+    }
+
+    public Carta[] getMaoVencedora() {
+        return this.maoVencedora;
     }
 
     private Carta[] mergeMao(Jogador j) {
