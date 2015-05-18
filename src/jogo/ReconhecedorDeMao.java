@@ -3,6 +3,7 @@ package jogo;
 import com.sun.deploy.util.ArrayUtil;
 import jogador.Jogador;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -164,6 +165,24 @@ public class ReconhecedorDeMao {
     }
 
     private boolean isStraight(Carta[] cartas) {
+        ArrayList<Integer> valores = new ArrayList<Integer>();
+        for(Carta c : cartas)
+            valores.add(c.getValor().ordinal());
+        Collections.sort(valores);
+
+        int seqCount = 0;
+        for(int i = 0; i < valores.size(); i += 1) {
+            if(seqCount == 0 && i == 0) {
+                seqCount += 1;
+                continue;
+            }
+            if(valores.get(i) - valores.get(i - 1) == 1)
+                seqCount += 1;
+            else
+                seqCount = 1;
+            if(seqCount == 5)
+                return true;
+        }
         return false;
     }
 
