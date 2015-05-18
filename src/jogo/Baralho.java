@@ -8,7 +8,7 @@ import excecoes.ExcecaoCartasInsuficientes;
 
 
 public class Baralho {
-    private Vector<Carta> cartas = new Vector<>();
+    private Vector<Carta> cartas = new Vector<Carta>();
 
     public Baralho() {
         for (Carta.Naipe n : Carta.Naipe.values()) {
