@@ -88,6 +88,7 @@ public class Carta implements Comparable{
         }
 
         String naipe = "";
+        // Usamos caracteres Unicode para deixar a apresentacao visual mais agradavel
         switch (this.naipe){
             case Espadas:
                 naipe = new String(new int[] { 0x2660 }, 0, 1);

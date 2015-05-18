@@ -55,16 +55,14 @@ public class Mesa {
     }
 
     private void adicionaJogador(short id, String nomeJogador){
-        /*if(this.jogadores.capacity() == NUMERO_MAXIMO_JOGADORES){
-            throw new ExcecaoNumeroMaximoJogadores();
-        }*/
-
         this.jogadores.add(new Jogador(id, nomeJogador, QUANTIDADE_PADRAO_DINHEIRO));
     }
 
     public static Mesa getInstance(int numeroDeJogadores, String nomeJogador){
         if(instanciaMesa == null){
             instanciaMesa = new Mesa(numeroDeJogadores, nomeJogador);
+        }else{// Caso ja se tenha iniciado o jogo, incrementa o dealer
+            instanciaMesa.dealer = (instanciaMesa.dealer + 1) % instanciaMesa.jogadores.size();
         }
 
         return instanciaMesa;
@@ -84,10 +82,6 @@ public class Mesa {
         for(Jogador j : this.jogadores){
             j.ganhaCartas(this.baralho.getCartaTopo(), this.baralho.getCartaTopo());
         }
-
-        /*for(Jogador j : this.jogadores){
-            System.out.println(j.mostraCartas());
-        }*/
     }
 
     private void mostraCartasNaMesa(){
@@ -154,15 +148,21 @@ public class Mesa {
     // Metodo chamado no fim da rodada, eliminando todos os jogadores
     // em all-in que nao tenham ganho nada
     public void eliminaJogadores(){
-        for(Jogador j : this.jogadores){
-            if(j.isInAllin()){
-                j.saiDoJogo();
+        int size = this.jogadores.size();
+        for(int i = 0; i < size; i++){
+            if(jogadores.get(i).isInAllin()) {
+                jogadores.remove(i);
             }
         }
     }
 
     public boolean preFlop(){
-        int numeroDeJogadores = this.jogadores.capacity();
+        int numeroDeJogadores = this.jogadores.size();
+
+        // So um jogador, fim de jogo
+        if(numeroDeJogadores == 1){
+            return true;
+        }
 
         int smallBlind = (this.dealer + 1) % numeroDeJogadores;
         int bigBlind = (smallBlind + 1) % numeroDeJogadores;
@@ -255,7 +255,7 @@ public class Mesa {
     }
 
     private boolean rodadaDeApostas(){
-        int numeroDeJogadores = this.jogadores.capacity();
+        int numeroDeJogadores = this.jogadores.size();
         int aposta = 0;
         // Valor da aposta corrente da rodada (maior aposta)
         int apostaCorrente = 0;

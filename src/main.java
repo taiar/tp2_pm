@@ -4,56 +4,52 @@ import jogo.ReconhecedorDeMao;
 
 public class main {
 
-    private static int smallBlind(int dealer, int nJogadores){
-        return (dealer + 1) % nJogadores;
-    }
-
-    private static int bigBlind(int dealer, int nJogadores){
-        return (dealer + 2) % nJogadores;
-    }
-
-    private static void pt(String s){
-        System.out.println(s);
-    }
-
-    public static void main(String[] args) {
+    public static boolean executaJogo(String nomeJogador){
         boolean fimDeJogo = false;
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Olá! Bem vindo ao Pôquer Texas Hold 'em PM 2015/1!");
-        System.out.println("Qual é o seu nome? ");
-        String nomeJogador = sc.nextLine();
 
         Mesa m = Mesa.getInstance(8, nomeJogador);
         fimDeJogo = m.preFlop();
         if(fimDeJogo){
-            return;
+            return fimDeJogo;
         }
         fimDeJogo = m.flop();
         if(fimDeJogo){
-            return;
+            return fimDeJogo;
         }
         fimDeJogo = m.turn();
         if(fimDeJogo){
-            return;
+            return fimDeJogo;
         }
         fimDeJogo = m.river();
         if(fimDeJogo){
-            return;
+            return fimDeJogo;
         }
 
         m.showdown();
 
-        /*
-        Mesa m = Mesa.getInstance(5);
-        m.preFlop();
-        m.flop();
+        return true;
+    }
 
-        ReconhecedorDeMao r = new ReconhecedorDeMao(m);
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
-        r.mostraCartasJogadores();
-        r.mostraCartasMesa();
-        r.iteraSobreAvaliacoes();
-        */
+        System.out.println("Olá! Bem vindo ao Pôquer Texas Hold 'em PM 2015/1!");
+        System.out.println("Qual é o seu nome? ");
+        String opcao;
+        String nomeJogador = sc.nextLine();
+
+        do{
+            executaJogo(nomeJogador);
+            System.out.println("Deseja continuar jogando? <s/n>");
+
+            opcao = sc.next();
+
+            while ((! opcao.equals("s")) && (! opcao.equals("n"))){
+                System.out.println("Opcao '" + opcao + "' invalida.");
+                System.out.println("Deseja continuar jogando? <s/n>");
+                opcao = sc.next();
+            }
+
+        }while(opcao.equals("s"));
     }
 }
