@@ -161,6 +161,17 @@ public class ReconhecedorDeMao {
     }
 
     private boolean isFlush(Carta[] cartas) {
+        ArrayList<Integer> naipes = new ArrayList<Integer>();
+        for(Carta c : cartas)
+            naipes.add(c.getNaipe().ordinal());
+
+        int[] contaNaipes = new int[4];
+
+        for(int i = 0; i < naipes.size(); i += 1) {
+            contaNaipes[naipes.get(i)] += 1;
+            if(contaNaipes[naipes.get(i)] == 5)
+                return true;
+        }
         return false;
     }
 
