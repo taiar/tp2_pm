@@ -149,8 +149,12 @@ public class Mesa {
     // em all-in que nao tenham ganho nada
     public void eliminaJogadores(){
         int size = this.jogadores.size();
+        Jogador j;
         for(int i = 0; i < size; i++){
-            if(jogadores.get(i).isInAllin()) {
+            j = jogadores.get(i);
+            if(j.isInAllin()) {
+                baralho.adicionaCarta(j.getCartas()[0]);
+                baralho.adicionaCarta(j.getCartas()[1]);
                 jogadores.remove(i);
             }
         }
@@ -494,5 +498,22 @@ public class Mesa {
 
     public Carta[] getCartas() {
         return cartas;
+    }
+
+    public void devolveCartasAoBaralho(){
+        for(Carta c : this.cartas){
+            this.baralho.adicionaCarta(c);
+        }
+
+        for(Jogador j : this.jogadores){
+            this.baralho.adicionaCarta(j.getCartas()[0]);
+            this.baralho.adicionaCarta(j.getCartas()[1]);
+        }
+
+        this.printStatusBaralho();
+    }
+
+    public void printStatusBaralho(){
+        System.out.println(this.baralho.quantidadeDeCartas() +" cartas no baralho");
     }
 }

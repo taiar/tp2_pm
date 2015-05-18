@@ -4,30 +4,40 @@ import jogo.ReconhecedorDeMao;
 
 public class main {
 
-    public static boolean executaJogo(String nomeJogador){
+    public static void executaJogo(String nomeJogador){
         boolean fimDeJogo = false;
 
         Mesa m = Mesa.getInstance(8, nomeJogador);
         fimDeJogo = m.preFlop();
         if(fimDeJogo){
-            return fimDeJogo;
+            m.eliminaJogadores();
+            m.devolveCartasAoBaralho();
+            return;
         }
         fimDeJogo = m.flop();
         if(fimDeJogo){
-            return fimDeJogo;
+            m.eliminaJogadores();
+            m.devolveCartasAoBaralho();
+            return;
         }
         fimDeJogo = m.turn();
         if(fimDeJogo){
-            return fimDeJogo;
+            m.eliminaJogadores();
+            m.devolveCartasAoBaralho();
+            return;
         }
         fimDeJogo = m.river();
         if(fimDeJogo){
-            return fimDeJogo;
+            m.eliminaJogadores();
+            m.devolveCartasAoBaralho();
+            return;
         }
 
         m.showdown();
 
-        return true;
+        m.eliminaJogadores();
+        m.devolveCartasAoBaralho();
+
     }
 
     public static void main(String[] args) {

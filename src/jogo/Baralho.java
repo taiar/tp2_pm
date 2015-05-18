@@ -82,7 +82,15 @@ public class Baralho {
         }
 
         return c;
+    }
 
+    // Devolve carta ao baralho
+    public void adicionaCarta(Carta c){
+        this.cartas.add(c);
+    }
+
+    public int quantidadeDeCartas(){
+        return this.cartas.size();
     }
 
 }
