@@ -86,6 +86,11 @@ public class Jogador {
         System.out.println(this.nome + " saiu do jogo");
     }
 
+    public boolean decideCompletar(){
+        Random r = new Random();
+        return ((r.nextInt() % 3) == 0);
+    }
+
     public void aumentaQuantidadeDinheiro(int quantidade){
         /* Utilizo uma assercao porque assumo que este metodo sera chamado apenas
          *  quando um jogador ganhar o pote ou ter aposta devolvida, o que sempre

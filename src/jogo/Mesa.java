@@ -8,7 +8,7 @@ import java.util.Vector;
 
 public class Mesa {
 
-    public static final int QUANTIDADE_PADRAO_DINHEIRO = 100;
+    public static final int QUANTIDADE_PADRAO_DINHEIRO = 500;
     public static final int NUMERO_MAXIMO_JOGADORES = 8;
     public static final int NUMERO_MINIMO_JOGADORES = 2;
     public static final int NUMERO_TOTAL_CARTAS_PUBLICAS = 5;
@@ -160,6 +160,25 @@ public class Mesa {
         }
     }
 
+    public boolean temUmSoJogador(int index, Jogador j){
+        // Verifica se ha mais de um jogador
+        if(this.jogadoresNaRodada() == 1){
+            int indiceUltimoJogador = this.achaIndiceUltimoJogador();
+            Jogador temp = this.jogadores.get(indiceUltimoJogador);
+            temp.aumentaQuantidadeDinheiro(this.pote);
+            System.out.println("Jogador " + temp.getNome() + " ganhou o jogo.");
+            this.pote = 0;
+            this.jogadores.set(index, j);
+            this.jogadores.set(indiceUltimoJogador, temp);
+            this.mostraEstadoJogadores();
+            eliminaJogadores();
+            // Retorna, mostrando que o jogo acabou
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean preFlop(){
         int numeroDeJogadores = this.jogadores.size();
 
@@ -229,18 +248,7 @@ public class Mesa {
 
                         if(opcao.equals("n")){ // desistiu da rodada
                             j.saiDaRodada();
-                            // Verifica se ha mais de um jogador
-                            if(this.jogadoresNaRodada() == 1){
-                                int indiceUltimoJogador = this.achaIndiceUltimoJogador();
-                                Jogador temp = this.jogadores.get(indiceUltimoJogador);
-                                temp.aumentaQuantidadeDinheiro(this.pote);
-                                System.out.println("Jogador " + temp.getNome() + " ganhou o jogo.");
-                                this.pote = 0;
-                                this.jogadores.set(index, j);
-                                this.jogadores.set(indiceUltimoJogador, temp);
-                                this.mostraEstadoJogadores();
-                                eliminaJogadores();
-                                // Retorna, mostrando que o jogo acabou
+                            if(this.temUmSoJogador(index, j)){
                                 return true;
                             }
                         }else{ // Continua
@@ -291,17 +299,7 @@ public class Mesa {
                             j.saiDaRodada();
 
                             // Verifica se ha mais de um jogador
-                            if(this.jogadoresNaRodada() == 1){
-                                int indiceUltimoJogador = this.achaIndiceUltimoJogador();
-                                Jogador temp = this.jogadores.get(indiceUltimoJogador);
-                                temp.aumentaQuantidadeDinheiro(this.pote);
-                                System.out.println("Jogador " + temp.getNome() + " ganhou o jogo.");
-                                this.pote = 0;
-                                this.jogadores.set(index, j);
-                                this.jogadores.set(indiceUltimoJogador, temp);
-                                this.mostraEstadoJogadores();
-
-                                // Retorna, mostrando que o jogo acabou
+                            if(this.temUmSoJogador(index, j)){
                                 return true;
                             }
 
@@ -333,17 +331,7 @@ public class Mesa {
                             j.saiDaRodada();
 
                             // Verifica se ha mais de um jogador
-                            if(this.jogadoresNaRodada() == 1){
-                                int indiceUltimoJogador = this.achaIndiceUltimoJogador();
-                                Jogador temp = this.jogadores.get(indiceUltimoJogador);
-                                temp.aumentaQuantidadeDinheiro(this.pote);
-                                System.out.println("Jogador " + temp.getNome() + " ganhou o jogo.");
-                                this.pote = 0;
-                                this.jogadores.set(index, j);
-                                this.jogadores.set(indiceUltimoJogador, temp);
-                                this.mostraEstadoJogadores();
-
-                                // Retorna, mostrando que o jogo acabou
+                            if(this.temUmSoJogador(index, j)){
                                 return true;
                             }
 
@@ -381,13 +369,19 @@ public class Mesa {
                 if(apostaCorrente > j.getUltimaAposta()){
                     int diferenca = apostaCorrente - j.getUltimaAposta();
                     if(j.getId() != ID_JOGADOR_USUARIO){ // Jogador da maquina
-                        // Tem que completar a aposta
-                        // TODO: decisao do jogador de apostar ou nao
-                        /* TODO: Se nao decidir apostar, sai. Quando alguem sair verificar se sobrou
-                           TODO: apenas um jogador */
-                        // Caso decida completar
-                        aposta = j.aposta(diferenca);
-                        pote += aposta;
+
+                        if(j.decideCompletar()){
+                            aposta = j.aposta(diferenca);
+                            pote += aposta;
+                        }else{
+                            j.saiDaRodada();
+                            // Verifica se ha mais de um jogador
+                            if(this.temUmSoJogador(index, j)){
+                                return true;
+                            }
+                        }
+
+
                     }else{ // Jogador usuario
                         System.out.println("Sua vez, " + j.getNome());
                         System.out.println(j.getNome() + ", suas cartas sao:");
@@ -411,17 +405,7 @@ public class Mesa {
                             if(opcao.equals("n")){ // desistiu da rodada
                                 j.saiDaRodada();
                                 // Verifica se ha mais de um jogador
-                                if(this.jogadoresNaRodada() == 1){
-                                    int indiceUltimoJogador = this.achaIndiceUltimoJogador();
-                                    Jogador temp = this.jogadores.get(indiceUltimoJogador);
-                                    temp.aumentaQuantidadeDinheiro(this.pote);
-                                    System.out.println("Jogador " + temp.getNome() + " ganhou o jogo.");
-                                    this.pote = 0;
-                                    this.jogadores.set(index, j);
-                                    this.jogadores.set(indiceUltimoJogador, temp);
-                                    this.mostraEstadoJogadores();
-
-                                    // Retorna, mostrando que o jogo acabou
+                                if(this.temUmSoJogador(index, j)){
                                     return true;
                                 }
 
