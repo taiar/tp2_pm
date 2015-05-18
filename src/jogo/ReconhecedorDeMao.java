@@ -39,7 +39,7 @@ public class ReconhecedorDeMao {
     };
 
     public ReconhecedorDeMao(Mesa mesa) {
-        this.mesa = Mesa.getInstance(0);
+        this.mesa = Mesa.getInstance(0, "");
         this.jogadores = this.mesa.getJogadores();
     }
 
