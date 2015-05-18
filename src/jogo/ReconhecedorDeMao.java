@@ -68,7 +68,7 @@ public class ReconhecedorDeMao {
                     Method m = this.getClass().getDeclaredMethod(this.ordemAvaliacao[j], Carta[].class);
                     m.setAccessible(true);
                     Object result = m.invoke(this, new Object[]{ hand });
-                    if((boolean) result) {
+                    if(((Boolean) result).booleanValue()) {
                         this.mao[i] = j;
                         break;
                     }
@@ -214,7 +214,7 @@ public class ReconhecedorDeMao {
     private boolean isThreeOfAKind(Carta[] cartas) {
         Set<Carta> conjunto = new HashSet<Carta>();
         Collections.addAll(conjunto, cartas);
-        ArrayList<Carta.Naipe> naipes = new ArrayList<>(Arrays.asList(Carta.Naipe.values()));
+        ArrayList<Carta.Naipe> naipes = new ArrayList<Carta.Naipe>(Arrays.asList(Carta.Naipe.values()));
         int somaContains;
 
         for(int i = 0; i < cartas.length; i += 1) {
@@ -235,7 +235,7 @@ public class ReconhecedorDeMao {
     private boolean isTwoPairs(Carta[] cartas) {
         Set<Carta> conjunto = new HashSet<Carta>();
         Collections.addAll(conjunto, cartas);
-        ArrayList<Carta.Naipe> naipes = new ArrayList<>(Arrays.asList(Carta.Naipe.values()));
+        ArrayList<Carta.Naipe> naipes = new ArrayList<Carta.Naipe>(Arrays.asList(Carta.Naipe.values()));
         boolean flag_temUmPar = false;
 
         for(int i = 0; i < cartas.length; i += 1) {
@@ -262,7 +262,7 @@ public class ReconhecedorDeMao {
     private boolean isOnePair(Carta[] cartas) {
         Set<Carta> conjunto = new HashSet<Carta>();
         Collections.addAll(conjunto, cartas);
-        ArrayList<Carta.Naipe> naipes = new ArrayList<>(Arrays.asList(Carta.Naipe.values()));
+        ArrayList<Carta.Naipe> naipes = new ArrayList<Carta.Naipe>(Arrays.asList(Carta.Naipe.values()));
 
         for(int i = 0; i < cartas.length; i += 1) {
             ArrayList<Carta.Naipe> naipeRestante = (ArrayList<Carta.Naipe>) naipes.clone();
