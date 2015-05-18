@@ -204,7 +204,9 @@ public class Mesa {
                         aposta = j.aposta(valorAposta);
                         this.pote += aposta;
                     }else{ // Jogador usuario
-                        System.out.println("\n\nSua vez, " + j.getNome());
+                        String hand = new String(new int[] { 0x261E }, 0, 1);
+                        System.out.println("\n"+ hand +"Sua vez, " + j.getNome());
+                        System.out.println(j.getNome() + ", suas cartas são: " + j.mostraCartas());
                         System.out.println("Para continuar na rodada, voce deve completar $" + valorAposta);
                         System.out.println("Você tem $" + j.getDinheiro() + ". Completa $" + valorAposta + "? <s/n>");
 
@@ -240,7 +242,7 @@ public class Mesa {
                     }
                 }
             } else if(j.isInAllin()){ // Trata all-in
-                System.out.println(j.getNome() + " esta em all-in neste jogo.");
+                System.out.println("######## " + j.getNome() + " esta em all-in neste jogo.");
             }
 
             // Devolve jogador alterado ao seu lugar no vetor
@@ -303,7 +305,8 @@ public class Mesa {
 
                 }else { // Jogador usuario
                     if(! j.isInAllin()){
-                        System.out.println("\n\nSua vez, " + j.getNome());
+                        String hand = new String(new int[] { 0x261E }, 0, 1);
+                        System.out.println("\n"+ hand +"Sua vez, " + j.getNome());
                         System.out.println(j.getNome() + ", suas cartas sao: ");
                         System.out.println(j.mostraCartas());
                         System.out.println("Para continuar na rodada, voce deve cobrir $" + apostaCorrente +
@@ -430,7 +433,7 @@ public class Mesa {
     }
 
     public boolean flop() {
-        System.out.println("Flop");
+        System.out.println("==========> Primeira Fase: Flop <==========");
 
         // Revela cartas na mesa
         for (int i = 0; i < 3; i++) {
@@ -448,7 +451,7 @@ public class Mesa {
      * @return O estado de fim do jogo: acabou ou nao (nao = continua)
      */
     public boolean turn(){
-        System.out.println("Turn");
+        System.out.println("==========> Segunda Fase: Turn <==========");
 
         // Revela quarta carta
         this.cartas[3] = this.baralho.getCartaTopo();
@@ -464,7 +467,7 @@ public class Mesa {
      * @return O estado de fim do jogo: acabou ou nao (nao = continua)
      */
     public boolean river(){
-        System.out.println("River");
+        System.out.println("==========> Terceira Fase: River <==========");
 
         // Revela quarta carta
         this.cartas[4] = this.baralho.getCartaTopo();
@@ -480,7 +483,7 @@ public class Mesa {
      * @return O estado de fim do jogo: acabou ou nao (nao = continua)
      */
     public void showdown() {
-        System.out.println("Showdown");
+        System.out.println("==========> Ultima Fase: Showdown <==========");
 
         this.mostraCartasNaMesa();
     }

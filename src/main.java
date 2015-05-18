@@ -17,12 +17,12 @@ public class main {
     }
 
     public static void main(String[] args) {
-       boolean fimDeJogo = false;
+        boolean fimDeJogo = false;
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Olá! Bem vindo ao Pôquer Texas Hold 'em PM 2015/1!");
         System.out.println("Qual é o seu nome? ");
-        String nomeJogador = sc.next();
+        String nomeJogador = sc.nextLine();
 
         Mesa m = Mesa.getInstance(8, nomeJogador);
         fimDeJogo = m.preFlop();
