@@ -331,6 +331,22 @@ public class Mesa {
                                     " rodada.\nVoce esta fora desta rodada.");
                             aposta = 0;
                             j.saiDaRodada();
+
+                            // Verifica se ha mais de um jogador
+                            if(this.jogadoresNaRodada() == 1){
+                                int indiceUltimoJogador = this.achaIndiceUltimoJogador();
+                                Jogador temp = this.jogadores.get(indiceUltimoJogador);
+                                temp.aumentaQuantidadeDinheiro(this.pote);
+                                System.out.println("Jogador " + temp.getNome() + " ganhou o jogo.");
+                                this.pote = 0;
+                                this.jogadores.set(index, j);
+                                this.jogadores.set(indiceUltimoJogador, temp);
+                                this.mostraEstadoJogadores();
+
+                                // Retorna, mostrando que o jogo acabou
+                                return true;
+                            }
+
                         }else{// Aposta valida
                             aposta = j.aposta(aposta);
                             System.out.println("Voce esta apostando $" + aposta);
@@ -355,7 +371,6 @@ public class Mesa {
 
         }// Fim rodada de apostas
 
-        System.out.println("Rodada de ajuste de apostas");
         // Rodada de ajuste de apostas
         for(int i = 0; i < numeroDeJogadores; i++){
             index = (i + dealer + 1) % numeroDeJogadores;
