@@ -1,13 +1,12 @@
 import jogo.Mesa;
 import java.util.Scanner;
-import jogo.ReconhecedorDeMao;
 
 public class main {
 
     public static void executaJogo(String nomeJogador){
         boolean fimDeJogo = false;
 
-        Mesa m = Mesa.getInstance(8, nomeJogador);
+        Mesa m = Mesa.getInstance(Mesa.NUMERO_MAXIMO_JOGADORES, nomeJogador);
         fimDeJogo = m.preFlop();
         if(fimDeJogo){
             m.eliminaJogadores();
