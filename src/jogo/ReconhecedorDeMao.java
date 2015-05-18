@@ -44,6 +44,18 @@ public class ReconhecedorDeMao {
         "isOnePair"
     };
 
+    private String[] nomeJogada = {
+        "Um implacável Royal Straight Flush",
+        "Um maravilhoso Straight Flush",
+        "Um inexorável Four of A Kind",
+        "Um estupendo Full House",
+        "Um queridíssimo Flush",
+        "Um magnânimo Straight",
+        "Uma Trinca Sensacional",
+        "Um magnânimo Dois Pares",
+        "Um Parzinho gente boa"
+    };
+
     public ReconhecedorDeMao() {
         this.mesa = Mesa.getInstance(0, "");
         this.jogadores = this.mesa.getJogadores();
@@ -99,7 +111,7 @@ public class ReconhecedorDeMao {
             }
 
         this.jogadorVencedor = this.jogadores.elementAt(winnerIndex);
-        this.jogadaVencedora = this.ordemAvaliacao[melhorAvaliacao];
+        this.jogadaVencedora = this.nomeJogada[melhorAvaliacao];
         this.maoVencedora = this.mergeMao(this.jogadorVencedor);
 
         return this.jogadores.elementAt(winnerIndex);

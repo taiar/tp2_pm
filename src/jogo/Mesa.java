@@ -500,8 +500,10 @@ public class Mesa {
         Jogador j = r.resultado();
         System.out.println("Ganhador: " + r.getJogadorVencedor().getNome());
         System.out.println("Jogada vencedora: " + r.getJogadaVencedora());
+        System.out.println();
         for(Carta carta : r.getMaoVencedora())
             System.out.print(carta + ",");
+        System.out.println();
     }
 
     public Vector<Jogador> getJogadores() {
