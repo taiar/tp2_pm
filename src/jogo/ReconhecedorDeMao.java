@@ -157,6 +157,27 @@ public class ReconhecedorDeMao {
     }
 
     private boolean isFullHouse(Carta[] cartas) {
+        ArrayList<Integer> valores = new ArrayList<Integer>(13);
+        for(Carta c : cartas)
+            valores.add(c.getValor().ordinal());
+
+        for(int i = 0; i < cartas.length; i += 1)
+            valores.set(cartas[i].getValor().ordinal(), valores.get(cartas[i].getValor().ordinal()) + 1);
+
+        boolean flag_temPar = false;
+        boolean flag_temTrio = false;
+
+        for (int i = 0; i < valores.size(); i++) {
+            if(valores.get(i) == 2) {
+                flag_temPar = true;
+                continue;
+            }
+            if(valores.get(i) == 3) {
+                flag_temTrio = true;
+                continue;
+            }
+        }
+
         return false;
     }
 
