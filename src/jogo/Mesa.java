@@ -166,7 +166,9 @@ public class Mesa {
             int indiceUltimoJogador = this.achaIndiceUltimoJogador();
             Jogador temp = this.jogadores.get(indiceUltimoJogador);
             temp.aumentaQuantidadeDinheiro(this.pote);
+            System.out.println("\n\n\n**********************************************\n");
             System.out.println("Jogador " + temp.getNome() + " ganhou o jogo.");
+            System.out.println("\n**********************************************\n\n\n");
             this.pote = 0;
             this.jogadores.set(index, j);
             this.jogadores.set(indiceUltimoJogador, temp);
@@ -223,6 +225,11 @@ public class Mesa {
             index = (i + bigBlind + 1) % numeroDeJogadores;
 
             j = this.jogadores.get(index);
+
+            // Contemple a beleza disso.
+            if(j == null){
+                continue;
+            }
 
             if((! j.isInAllin()) && (j.isEstaNaRodada())){
                 if(j.getUltimaAposta() < VALOR_PADRAO_BIG_BLIND){
@@ -390,8 +397,8 @@ public class Mesa {
                         if(! j.isInAllin()){
                             System.out.println("Para continuar na rodada, voce deve completar $" + diferenca);
                             System.out.println("Você tem $" + j.getDinheiro());
-                            System.out.println("O que deseja fazer?\nDigite um valor menor do que a diferenca" +
-                                    " para sair da rodada sem gastar mais nada,\nou um valor maior ou igual para continuar.");
+                            System.out.println("Para continuar na rodada, voce deve completar $" + diferenca);
+                            System.out.println("Completa " + diferenca + "? <s/n>");
 
                             String opcao = sc.next();
 

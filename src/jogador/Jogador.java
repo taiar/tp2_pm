@@ -77,7 +77,15 @@ public class Jogador {
     // Gera um valor aleatorio para aposta
     public int geraValorAposta(){
         Random r = new Random();
-        int valorCartas = this.cartas[0].getValor().ordinal() + this.cartas[1].getValor().ordinal();
+
+        int valorCartas = 0;
+
+        try{
+            valorCartas = this.cartas[0].getValor().ordinal() + this.cartas[1].getValor().ordinal();
+        }catch(NullPointerException np){
+            valorCartas = r.nextInt() % 26;
+        }
+
         return valorCartas + (r.nextInt() % 20);
     }
 
