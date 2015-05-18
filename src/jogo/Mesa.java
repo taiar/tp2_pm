@@ -168,6 +168,10 @@ public class Mesa {
             return true;
         }
 
+        for(Jogador j: this.jogadores){
+            j.entraNaRodada();
+        }
+
         int smallBlind = (this.dealer + 1) % numeroDeJogadores;
         int bigBlind = (smallBlind + 1) % numeroDeJogadores;
 
@@ -510,10 +514,6 @@ public class Mesa {
             this.baralho.adicionaCarta(j.getCartas()[1]);
         }
 
-        this.printStatusBaralho();
-    }
-
-    public void printStatusBaralho(){
-        System.out.println(this.baralho.quantidadeDeCartas() +" cartas no baralho");
+        this.baralho.embaralha();
     }
 }
