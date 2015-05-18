@@ -85,7 +85,7 @@ public class ReconhecedorDeMao {
         }
     }
 
-    public void resultado() {
+    public Jogador resultado() {
         int winnerIndex = -1;
         int melhorAvaliacao = 100;
 
@@ -95,8 +95,7 @@ public class ReconhecedorDeMao {
                 melhorAvaliacao = this.mao[i];
             }
 
-//        System.out.println("Jogo ganho por: " + this.jogadores.elementAt(winnerIndex).getNome());
-//        System.out.println("Jogo ganho com: " + this.ordemAvaliacao[melhorAvaliacao]);
+        return this.jogadores.elementAt(winnerIndex);
     }
 
     private Carta[] mergeMao(Jogador j) {
@@ -135,7 +134,7 @@ public class ReconhecedorDeMao {
     }
 
     private boolean isStraightFlush(Carta[] cartas) {
-        return false;
+        return this.isStraight(cartas) && this.isFlush(cartas);
     }
 
     private boolean isFourOfAKind(Carta[] cartas) {
@@ -157,28 +156,24 @@ public class ReconhecedorDeMao {
     }
 
     private boolean isFullHouse(Carta[] cartas) {
-        ArrayList<Integer> valores = new ArrayList<Integer>(13);
-        for(Carta c : cartas)
-            valores.add(c.getValor().ordinal());
+        int[] valores = new int[13];
 
-        for(int i = 0; i < cartas.length; i += 1)
-            valores.set(cartas[i].getValor().ordinal(), valores.get(cartas[i].getValor().ordinal()) + 1);
+        for(Carta c : cartas)
+            valores[c.getValor().ordinal()] += 1;
 
         boolean flag_temPar = false;
         boolean flag_temTrio = false;
 
-        for (int i = 0; i < valores.size(); i++) {
-            if(valores.get(i) == 2) {
+        for (Integer valore : valores) {
+            if (valore == 2) {
                 flag_temPar = true;
                 continue;
             }
-            if(valores.get(i) == 3) {
+            if (valore == 3)
                 flag_temTrio = true;
-                continue;
-            }
         }
 
-        return false;
+        return flag_temPar && flag_temTrio;
     }
 
     private boolean isFlush(Carta[] cartas) {
