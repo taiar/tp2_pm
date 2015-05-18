@@ -1,9 +1,7 @@
 package jogo;
 
-import com.sun.deploy.util.ArrayUtil;
 import jogador.Jogador;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
