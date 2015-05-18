@@ -253,7 +253,7 @@ public class Mesa {
             this.jogadores.set(index, j);
         }
 
-        System.out.println("Pote: " + this.pote);
+        System.out.println("Pote: $" + this.pote);
         // Se o jogo continuou ate aqui, retorna falso
         return false;
     }
