@@ -68,16 +68,6 @@ public class Mesa {
         return instanciaMesa;
     }
 
-    public int getPote(){
-        return this.pote;
-    }
-
-    public void aumentaPote(int quantia){
-        assert quantia > 0;
-
-        this.pote += quantia;
-    }
-
     private void distribuiCartas(){
         for(Jogador j : this.jogadores){
             j.ganhaCartas(this.baralho.getCartaTopo(), this.baralho.getCartaTopo());
@@ -387,7 +377,6 @@ public class Mesa {
                                 return true;
                             }
                         }
-
 
                     }else{ // Jogador usuario
                         System.out.println("Sua vez, " + j.getNome());
