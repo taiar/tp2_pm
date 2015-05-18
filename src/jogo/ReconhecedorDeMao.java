@@ -101,7 +101,7 @@ public class ReconhecedorDeMao {
     }
 
     public Jogador resultado() {
-        int winnerIndex = -1;
+        int winnerIndex = 0;
         int melhorAvaliacao = 100;
 
         for (int i = 0; i < this.mao.length; i += 1)
@@ -110,10 +110,15 @@ public class ReconhecedorDeMao {
                 melhorAvaliacao = this.mao[i];
             }
 
-        this.jogadorVencedor = this.jogadores.elementAt(winnerIndex);
-        this.jogadaVencedora = this.nomeJogada[melhorAvaliacao];
-        this.maoVencedora = this.mergeMao(this.jogadorVencedor);
+        if(melhorAvaliacao == -1) {
+            this.jogadorVencedor = this.jogadores.elementAt(winnerIndex);
+            this.jogadaVencedora = "Apenas a maior carta em jogo";
+        } else {
+            this.jogadorVencedor = this.jogadores.elementAt(winnerIndex);
+            this.jogadaVencedora = this.nomeJogada[melhorAvaliacao];
+        }
 
+        this.maoVencedora = this.mergeMao(this.jogadorVencedor);
         return this.jogadores.elementAt(winnerIndex);
     }
 
