@@ -509,12 +509,13 @@ public class Mesa {
 
         System.out.println("=> Mão dos outros jogadores");
         for (Jogador perdedor : this.jogadores) {
-            System.out.print(perdedor.getNome() + ": ");
-            for(Carta carta : perdedor.getCartas())
-                System.out.print(carta + ",");
-            System.out.println();
+            if(perdedor.isEstaNaRodada()) {
+                System.out.print(perdedor.getNome() + ": ");
+                for(Carta carta : perdedor.getCartas())
+                    System.out.print(carta + ",");
+                System.out.println();
+            }
         }
-        
     }
 
     public Vector<Jogador> getJogadores() {
