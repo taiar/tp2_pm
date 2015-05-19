@@ -215,8 +215,7 @@ public class Mesa {
             index = (i + bigBlind + 1) % numeroDeJogadores;
 
             j = this.jogadores.get(index);
-
-            // Contemple a beleza disso.
+            
             if(j == null){
                 continue;
             }
