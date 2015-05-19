@@ -499,12 +499,22 @@ public class Mesa {
         ReconhecedorDeMao r = new ReconhecedorDeMao();
         r.calculaMao();
         Jogador j = r.resultado();
+        
         System.out.println("Ganhador: " + r.getJogadorVencedor().getNome());
         System.out.println("Jogada vencedora: " + r.getJogadaVencedora());
         System.out.println();
         for(Carta carta : r.getMaoVencedora())
             System.out.print(carta + ",");
         System.out.println();
+
+        System.out.println("=> Mão dos outros jogadores");
+        for (Jogador perdedor : this.jogadores) {
+            System.out.print(perdedor.getNome() + ": ");
+            for(Carta carta : perdedor.getCartas())
+                System.out.print(carta + ",");
+            System.out.println();
+        }
+        
     }
 
     public Vector<Jogador> getJogadores() {
