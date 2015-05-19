@@ -28,9 +28,12 @@ public class Mesa {
                                                 "Petruchio", "Horacio", "Ofelia",
                                               "Catarina", "Romeu"};
 
+    // Construtor privado para uso de Singleton
     private Mesa(int numeroDeJogadores, String nomeJogadorUsuario){
         this.baralho = new Baralho();
         this.baralho.embaralha();
+        /* O uso de Vector e preferivel ao de ArrayList pela necessidade
+           do acesso direto e remocao de jogadore*/
         this.jogadores = new Vector<Jogador>(numeroDeJogadores);
         this.cartas = new Carta[NUMERO_TOTAL_CARTAS_PUBLICAS];
         this.dealer = 0;
@@ -47,10 +50,6 @@ public class Mesa {
     }
 
     private void adicionaJogador(short id){
-        /*if(this.jogadores.size() == NUMERO_MAXIMO_JOGADORES){
-            throw new ExcecaoNumeroMaximoJogadores();
-        }*/
-
         this.jogadores.add(new Jogador(id, nomesJogadores[id], QUANTIDADE_PADRAO_DINHEIRO));
     }
 
@@ -58,6 +57,7 @@ public class Mesa {
         this.jogadores.add(new Jogador(id, nomeJogador, QUANTIDADE_PADRAO_DINHEIRO));
     }
 
+    // Metodo getInstance implementa o padrao de projeto Singleton
     public static Mesa getInstance(int numeroDeJogadores, String nomeJogador){
         if(instanciaMesa == null){
             instanciaMesa = new Mesa(numeroDeJogadores, nomeJogador);
@@ -108,6 +108,7 @@ public class Mesa {
         System.out.println("-------------------------");
     }
 
+    // Numero de jogadores na rodada
     public int jogadoresNaRodada(){
         int jogadoresNaRodada = 0;
 
@@ -171,6 +172,7 @@ public class Mesa {
         return false;
     }
 
+    // Fase de preparacao do jogo
     public boolean preFlop(){
         int numeroDeJogadores = this.jogadores.size();
 
@@ -216,7 +218,6 @@ public class Mesa {
 
             j = this.jogadores.get(index);
 
-            // Contemple a beleza disso.
             if(j == null){
                 continue;
             }
@@ -435,6 +436,11 @@ public class Mesa {
         return false;
     }
 
+
+    /**
+     * @brief Estado do jogo que envolve a revelacao das primeiras 3 cartas publicas
+     * @return O estado de fim do jogo: acabou ou nao (nao = continua)
+     */
     public boolean flop() {
         System.out.println("==========> Primeira Fase: Flop <==========");
 
@@ -509,6 +515,7 @@ public class Mesa {
         return cartas;
     }
 
+    // Como as cartas sao removidas do baralho ao serem entregues elas precisam ser devolvidas
     public void devolveCartasAoBaralho(){
         for(Carta c : this.cartas){
             this.baralho.adicionaCarta(c);

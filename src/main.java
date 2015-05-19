@@ -36,7 +36,6 @@ public class main {
 
         m.eliminaJogadores();
         m.devolveCartasAoBaralho();
-
     }
 
     public static void main(String[] args) {
